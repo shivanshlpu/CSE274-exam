@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DrainSense — Sewer Network Planner</title>
+  <meta name="description" content="DrainSense Sewer Network Planner – Interactive 2D/3D sewer infrastructure planning and ML-powered anomaly detection dashboard.">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app">
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-icon">DS</div>
+      <div class="app-title">Drain<span>Sense</span></div>
+      <span class="header-badge">Sewer Network Planner</span>
+    </div>
+    <div class="header-center">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="search-input" placeholder="Search pipe ID, manhole..." />
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-ghost" title="Layers">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Layers
+      </button>
+      <button class="btn btn-ghost" title="Export" id="btn-export">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export
+      </button>
+    </div>
+  </header>
+
+  <!-- STATS ROW -->
+  <div class="stats-row">
+    <div class="stat-chip"><div class="dot" style="background:var(--accent-cyan)"></div> Pipes <span class="val" id="stat-pipes">0</span></div>
+    <div class="stat-divider"></div>
+    <div class="stat-chip"><div class="dot" style="background:#64748b"></div> Manholes <span class="val" id="stat-manholes">0</span></div>
+    <div class="stat-divider"></div>
+    <div class="stat-chip"><div class="dot" style="background:var(--accent-purple)"></div> Network <span class="val" id="stat-length">0</span></div>
+    <div class="stat-divider"></div>
+    <div class="stat-chip"><div class="dot" style="background:var(--accent-red)"></div> Active Alerts <span class="val" id="stat-alerts" style="color:var(--accent-red)">0</span></div>
+    <div class="stat-divider"></div>
+    <div class="stat-chip"><div class="dot" style="background:var(--accent-green)"></div> System Health <span class="val" id="stat-health" style="color:var(--accent-green)">0%</span></div>
+  </div>
+
+  <!-- MAIN BODY -->
+  <div class="app-body">
+    <!-- LEFT PANE: MAP -->
+    <div class="left-pane">
+      <div id="map-container"></div>
+
+      <!-- Map Toolbar -->
+      <div class="map-toolbar">
+        <button class="toolbar-btn" title="Select">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+        </button>
+        <button class="toolbar-btn" title="Pan">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3"/><path d="M9 5l3-3 3 3"/><path d="M15 19l-3 3-3-3"/><path d="M19 9l3 3-3 3"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+        </button>
+        <button class="toolbar-btn" title="Measure">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20"/><path d="M6 16V4"/><path d="M18 16V4"/><path d="M6 8h12"/></svg>
+        </button>
+        <div class="toolbar-divider"></div>
+        <button class="toolbar-btn" title="Zoom In" onclick="Map2D.map.zoomIn()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <button class="toolbar-btn" title="Zoom Out" onclick="Map2D.map.zoomOut()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
+
+      <!-- Map Legend -->
+      <div class="map-legend">
+        <div class="legend-title">Network Status</div>
+        <div class="legend-items">
+          <div class="legend-item"><div class="legend-line" style="background:#6b7280"></div> Normal</div>
+          <div class="legend-item"><div class="legend-line" style="background:linear-gradient(90deg,#6b7280,#f59e0b)"></div> Minor Anomaly</div>
+          <div class="legend-item"><div class="legend-line" style="background:linear-gradient(90deg,#6b7280,#ef4444,#6b7280)"></div> Blockage</div>
+          <div class="legend-item"><div class="legend-icon" style="background:#374151;border:2px solid #6b7280"></div> Manhole</div>
+          <div class="legend-item"><div class="legend-icon" style="background:#1e40af;border:2px solid #3b82f6;font-size:7px">⚡</div> Pumping Stn</div>
+          <div class="legend-item"><div class="legend-icon" style="background:#065f46;border:2px solid #10b981;font-size:7px">🔄</div> STP</div>
+          <div class="legend-item"><div class="legend-icon" style="background:#581c87;border:2px solid #a855f7;font-size:7px">🏭</div> Treatment Plant</div>
+        </div>
+      </div>
+
+      <!-- Planning Tools -->
+      <div class="planning-tools">
+        <div class="planning-title">Planning Tools</div>
+        <div class="planning-grid">
+          <button class="plan-btn" id="tool-add-pipe"><span class="icon">┃</span>Add Pipe</button>
+          <button class="plan-btn" id="tool-add-manhole"><span class="icon">⊙</span>Manhole</button>
+          <button class="plan-btn" id="tool-add-pump"><span class="icon">⚡</span>Pump Stn</button>
+          <button class="plan-btn" id="tool-add-stp"><span class="icon">🔄</span>Add STP</button>
+          <button class="plan-btn" id="tool-add-lift"><span class="icon">⬆</span>Lift Stn</button>
+          <button class="plan-btn" id="tool-delete"><span class="icon">✕</span>Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="pane-divider"></div>
+
+    <!-- RIGHT PANE -->
+    <div class="right-pane">
+      <div class="right-header">
+        <div class="right-tabs">
+          <button class="tab-btn active" id="tab-inspector">Inspector</button>
+          <button class="tab-btn" id="tab-pipes">All Pipes</button>
+        </div>
+        <button class="btn btn-3d" id="btn-toggle-3d">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+          Analyze in 3D
+        </button>
+      </div>
+
+      <!-- 3D View Container -->
+      <div id="three-container">
+        <div class="camera-controls">
+          <button class="cam-btn" id="cam-reset" title="Reset View">↻</button>
+          <button class="cam-btn" id="cam-top" title="Top View">⊤</button>
+          <button class="cam-btn" id="cam-front" title="Front View">⊡</button>
+        </div>
+      </div>
+
+      <!-- Info Content -->
+      <div class="right-content" id="info-default">
+        <!-- Selected Pipe Info -->
+        <div id="pipe-info-empty" class="card animate-in">
+          <div class="card-body" style="text-align:center; padding:30px 20px;">
+            <div style="font-size:32px; margin-bottom:8px;">🔍</div>
+            <div style="font-size:13px; font-weight:600; margin-bottom:4px;">No Pipe Selected</div>
+            <div style="font-size:11px; color:var(--text-muted);">Click on any pipe in the map to inspect its details, elevation profile, and ML predictions.</div>
+          </div>
+        </div>
+
+        <div id="pipe-info-card" class="card animate-in" style="display:none">
+          <div class="card-header">
+            <h4 id="pi-id">—</h4>
+            <span class="popup-status normal" id="pi-status">normal</span>
+          </div>
+          <div class="card-body">
+            <div class="info-grid">
+              <div class="info-item"><span class="info-label">Diameter</span><span class="info-value" id="pi-diameter">—</span></div>
+              <div class="info-item"><span class="info-label">Material</span><span class="info-value" id="pi-material">—</span></div>
+              <div class="info-item"><span class="info-label">Start Elev.</span><span class="info-value" id="pi-start-elev">—</span></div>
+              <div class="info-item"><span class="info-label">End Elev.</span><span class="info-value" id="pi-end-elev">—</span></div>
+              <div class="info-item"><span class="info-label">Slope</span><span class="info-value" id="pi-slope">—</span></div>
+              <div class="info-item"><span class="info-label">Length</span><span class="info-value" id="pi-length">—</span></div>
+              <div class="info-item"><span class="info-label">Flow Rate</span><span class="info-value" id="pi-flow">—</span></div>
+              <div class="info-item"><span class="info-label">Pipe Age</span><span class="info-value" id="pi-age">—</span></div>
+              <div class="info-item"><span class="info-label">Last Maint.</span><span class="info-value" id="pi-last-maint">—</span></div>
+              <div class="info-item"><span class="info-label">Next Clean</span><span class="info-value" id="pi-next-clean">—</span></div>
+            </div>
+            <div class="popup-ml">
+              <div class="popup-ml-label">ML Blockage Prediction</div>
+              <div class="popup-ml-row" style="margin-top:4px">
+                <span class="info-value success" id="pi-ml-score" style="font-size:16px">—</span>
+                <div class="ml-score-bar" style="flex:1"><div class="ml-score-fill low" id="pi-ml-bar" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Elevation Profile -->
+        <div class="card elevation-card animate-in">
+          <div class="card-header"><h4>Elevation Profile</h4></div>
+          <div class="card-body" style="padding:10px 14px;">
+            <canvas id="elevation-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Quick network summary -->
+        <div class="card animate-in">
+          <div class="card-header"><h4>Network Summary</h4></div>
+          <div class="card-body">
+            <div class="info-grid">
+              <div class="info-item"><span class="info-label">Stations</span><span class="info-value">2 Pumping, 1 Lift</span></div>
+              <div class="info-item"><span class="info-label">Treatment</span><span class="info-value">1 STP, 1 WRP</span></div>
+              <div class="info-item"><span class="info-label">Pipe Material</span><span class="info-value">RCC / PVC / HDPE</span></div>
+              <div class="info-item"><span class="info-label">Dia. Range</span><span class="info-value">150mm – 600mm</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Pipes List -->
+      <div class="right-content" id="info-pipes" style="display:none; padding:0;">
+        <div class="pipes-table-container" style="overflow:auto; height:100%;">
+          <table class="pipes-table">
+            <thead>
+              <tr><th>Status</th><th>Pipe ID</th><th>ML Score</th><th>Diam</th></tr>
+            </thead>
+            <tbody id="pipes-tbody">
+              <!-- rows filled dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3D Tooltip -->
+<div class="tooltip-3d" id="tooltip-3d"></div>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="data.js"></script>
+<script src="map2d.js"></script>
+<script src="view3d.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
