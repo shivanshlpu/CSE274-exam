@@ -20,7 +20,7 @@ Error generating stack: `+e.message+`
 
 The Pipeline chains preprocessing steps with the model. During cross-validation, 'pipeline.fit()' is called only on each fold's training data — the scaler/imputer never sees validation data.
 
-'''python
+\\python
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
@@ -31,8 +31,7 @@ pipe = Pipeline([
     ('model', LogisticRegression())
 ])
 scores = cross_val_score(pipe, X_train, y_train, cv=5)
-'''
-
+\\
 This ensures each preprocessing step is learned from training data only, producing valid, unbiased validation metrics.
 
 **Real-World Impact:** A fraud detection model with leakage might show 99% CV accuracy in testing but drop to 60% in production — a devastating discrepancy that wastes resources and erodes trust.`},{q:`Compare and contrast StandardScaler, MinMaxScaler, and RobustScaler. When would you use each?`,a:`Feature scaling ensures that features with larger numerical ranges don't dominate distance-based or gradient-based algorithms.
@@ -329,10 +328,9 @@ Accuracy is worthless here — predicting "all legitimate" gives 99.5% accuracy 
 
 **Step 3: Baseline — No Balancing**
 Always establish a baseline with 'class_weight='balanced'' first — often sufficient.
-'''python
+\\python
 lr = LogisticRegression(class_weight='balanced')
-'''
-Result: automatically weights fraud class inversely proportional to frequency. No data manipulation needed.
+\\Result: automatically weights fraud class inversely proportional to frequency. No data manipulation needed.
 
 **Step 4: Resampling Techniques**
 a) **SMOTE Oversampling:** Creates synthetic minority samples by interpolating between real fraud cases and their k-nearest neighbors. Apply ONLY to training data, inside a Pipeline to prevent leakage.
@@ -341,20 +339,18 @@ b) **Random Undersampling:** Drop majority (legitimate) samples randomly. Fast b
 
 c) **Combined (SMOTEENN):** SMOTE oversampling + Edited Nearest Neighbors cleaning — often best of both worlds.
 
-'''python
+\\python
 from imblearn.pipeline import Pipeline
 from imblearn.over_sampling import SMOTE
 pipe = Pipeline([('smote', SMOTE(sampling_strategy=0.1)), ('model', XGBClassifier())])
-'''
-
+\\
 **Step 5: Threshold Tuning**
 Default threshold 0.5 is rarely optimal. Adjust based on business objective:
-'''python
+\\python
 probas = model.predict_proba(X_test)[:,1]
 threshold = 0.3  # catch more fraud, accept more false alarms
 preds = (probas >= threshold).astype(int)
-'''
-Plot Precision-Recall curve to visualize the tradeoff at all thresholds.
+\\Plot Precision-Recall curve to visualize the tradeoff at all thresholds.
 
 **Step 6: Model Selection**
 Tree-based ensembles (XGBoost with 'scale_pos_weight=199' for 99.5:0.5 ratio) often outperform linear models for fraud because fraud patterns are highly non-linear.
@@ -585,10 +581,8 @@ Each tree can be evaluated on its ~37% unused samples. Average OOB error across 
 5. **Difference Features:** y(t) − y(t−1) — rate of change (useful for non-stationary series)
 
 **ML Approach for Time-Series:**
-'''
-Create lag/rolling features → treat as regular tabular ML → use XGBoost/RF
-'''
-This approach often outperforms classical ARIMA models for complex, multi-variable time series.
+\\Create lag/rolling features → treat as regular tabular ML → use XGBoost/RF
+\\This approach often outperforms classical ARIMA models for complex, multi-variable time series.
 
 **Temporal Cross-Validation:**
 Cannot use standard k-fold. Use TimeSeriesSplit — always train on past, validate on future:
@@ -692,12 +686,10 @@ A single 80/20 split has high variance — a lucky/unlucky split can give mislea
 2. For each fold i: train on all folds except i; evaluate on fold i
 3. Average metrics across all k folds
 
-'''
-Fold 1: [Val] [Tr] [Tr] [Tr] [Tr]
+\\Fold 1: [Val] [Tr] [Tr] [Tr] [Tr]
 Fold 2: [Tr] [Val] [Tr] [Tr] [Tr]
 ...
-'''
-
+\\
 **k=5 (most common):** 5 train/val splits; good bias-variance balance.
 **k=10:** More reliable estimate but 2x slower.
 **LOOCV (k=n):** Most reliable but expensive for large n.
@@ -715,25 +707,22 @@ Without stratification (3-class, 80/10/10 distribution): one fold might get 0 sa
 
 **TimeSeriesSplit:**
 For temporal data — must respect time ordering:
-'''
-Split 1: Train [1-100], Val [101-120]
+\\Split 1: Train [1-100], Val [101-120]
 Split 2: Train [1-120], Val [121-140]
 Split 3: Train [1-140], Val [141-160]
-'''
-Expanding training window; each fold tests on strictly future data. Standard K-Fold would put future data into training — temporal leakage.
+\\Expanding training window; each fold tests on strictly future data. Standard K-Fold would put future data into training — temporal leakage.
 
 **Nested Cross-Validation:**
 For hyperparameter tuning without test set:
 - Outer loop: k-fold for unbiased performance estimate
 - Inner loop: CV for hyperparameter selection (on each outer train set)
 
-'''python
+\\python
 outer_cv = StratifiedKFold(5)
 inner_cv = StratifiedKFold(3)
 grid_search = GridSearchCV(model, params, cv=inner_cv)
 outer_scores = cross_val_score(grid_search, X, y, cv=outer_cv)
-'''
-
+\\
 **Choosing CV Strategy:**
 | Data Type | CV Method |
 |---|---|
@@ -802,13 +791,12 @@ Too few configurations searched → suboptimal model. Using the test set for sel
 **Grid Search (GridSearchCV):**
 Exhaustively tries every combination of specified parameter values.
 
-'''python
+\\python
 from sklearn.model_selection import GridSearchCV
 params = {'max_depth': [3, 5, 7], 'learning_rate': [0.01, 0.1, 0.3]}
 gs = GridSearchCV(XGBClassifier(), params, cv=5, scoring='f1')
 gs.fit(X_train, y_train)
-'''
-
+\\
 - Combinations: 3 × 3 = 9; with CV=5: 45 model fits
 - **Advantage:** Guaranteed to find best combination within the grid
 - **Disadvantage:** Exponential with more parameters — 5 params × 5 values = 5⁵ = 3125 combinations × 5 CV = 15,625 fits!
@@ -817,13 +805,12 @@ gs.fit(X_train, y_train)
 **Randomized Search (RandomizedSearchCV):**
 Randomly samples n_iter combinations from the parameter distributions.
 
-'''python
+\\python
 from sklearn.model_selection import RandomizedSearchCV
 from scipy.stats import uniform, randint
 params = {'max_depth': randint(3, 10), 'learning_rate': uniform(0.01, 0.3)}
 rs = RandomizedSearchCV(XGBClassifier(), params, n_iter=50, cv=5, random_state=42)
-'''
-
+\\
 - With n_iter=50 and CV=5: exactly 250 model fits regardless of search space size
 - Key insight: in high-dimensional spaces, random search explores more of the space than grid search for the same compute budget
 - **Advantage:** Scales to many parameters; often finds near-optimal in 50-100 iterations
@@ -833,7 +820,7 @@ rs = RandomizedSearchCV(XGBClassifier(), params, n_iter=50, cv=5, random_state=4
 **Bayesian Optimization (Optuna, Hyperopt):**
 Builds a probabilistic surrogate model (e.g., Tree Parzen Estimator or Gaussian Process) of the objective function, then uses an acquisition function (Expected Improvement) to decide which hyperparameters to evaluate next.
 
-'''python
+\\python
 import optuna
 def objective(trial):
     params = {'max_depth': trial.suggest_int('max_depth', 3, 10),
@@ -841,8 +828,7 @@ def objective(trial):
     return cross_val_score(XGBClassifier(**params), X_tr, y_tr, cv=5).mean()
 study = optuna.create_study(direction='maximize')
 study.optimize(objective, n_trials=100)
-'''
-
+\\
 - Intelligently focuses evaluations on promising regions after early exploration
 - **Advantage:** Much more efficient — finds better results than random search in same n_trials; handles conditional parameters
 - **Disadvantage:** More complex setup; overhead of surrogate model
@@ -891,15 +877,13 @@ Labeled anomaly data is extremely rare and expensive. An unsupervised approach l
 
 **Real-World Application — Network Intrusion Detection:**
 
-'''
-1. Collect normal network traffic features: packet_size, connection_duration, protocol, bytes_in/out
+\\1. Collect normal network traffic features: packet_size, connection_duration, protocol, bytes_in/out
 2. Train Isolation Forest on normal traffic only (or contamination=0.01 for 1% expected attacks)
 3. Score new connections in real-time: anomaly_score = model.decision_function(features)
 4. Flag connections with score < threshold for security review
 5. Monitor false positive rate — tune contamination to reduce analyst burden
 6. Retrain monthly as normal traffic patterns evolve
-'''
-
+\\
 **Evaluation Challenge:**
 True anomaly labels are rare. Use:
 - Precision at K (top K anomalies)
@@ -971,12 +955,11 @@ Information Gain biases toward features with many values (like unique IDs). Gain
 - Look for obvious data quality issues (impossible values, duplicates)
 
 **Step 3 — Train-Test Split (FIRST, before any preprocessing):**
-'''python
+\\python
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.20, stratify=y, random_state=42
 )
-'''
-Stratify ensures class proportions preserved. Test set is locked — never touched until final evaluation.
+\\Stratify ensures class proportions preserved. Test set is locked — never touched until final evaluation.
 
 **Step 4 — Preprocessing (fit on train only, transform both):**
 - Handle missing values: SimpleImputer (median for numerical, mode for categorical)
@@ -984,7 +967,7 @@ Stratify ensures class proportions preserved. Test set is locked — never touch
 - Scale numericals: StandardScaler for linear models; not needed for trees
 - Handle imbalance: SMOTE on training data inside pipeline
 
-'''python
+\\python
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 preprocessor = ColumnTransformer([
@@ -992,8 +975,7 @@ preprocessor = ColumnTransformer([
     ('cat', Pipeline([('impute', SimpleImputer(strategy='most_frequent')),
                       ('ohe', OneHotEncoder(handle_unknown='ignore'))]), cat_cols)
 ])
-'''
-
+\\
 **Step 5 — Feature Engineering:**
 - Create lag features: last_login_days_ago, purchase_count_30d, avg_ticket_response_hours
 - Create interaction features: (contract_length × monthly_charge) = total_contract_value
@@ -1632,14 +1614,12 @@ Two-level approach:
 4. Meta-learner (usually simple: Logistic Regression, Ridge) learns how to optimally combine base models
 
 **Example:**
-'''
-Base Model 1 (LR): P(class=1) = 0.7
+\\Base Model 1 (LR): P(class=1) = 0.7
 Base Model 2 (SVM): P(class=1) = 0.8
 Base Model 3 (RF): P(class=1) = 0.6
 → Stack: [0.7, 0.8, 0.6] (new feature vector)
 → Meta-learner predicts final class using this vector
-'''
-
+\\
 **Why Stacking Works:**
 - Base models capture different patterns
 - Meta-learner learns which models are reliable in different regions of input space
@@ -1745,12 +1725,11 @@ Load pre-trained weights → replace final layer (1000-class ImageNet → 10-cla
 
 **2. Feature Extraction:**
 Load pre-trained model → remove final layer → use as fixed feature extractor.
-'''python
+\\python
 base_model = ResNet50(weights='imagenet', include_top=False)
 features = base_model.predict(X)  # Extract features from pre-trained model
 new_model = LogisticRegression().fit(features, y)  # Train simple classifier on top
-'''
-- Pro: Very fast; works with small data (1000s of samples)
+\\- Pro: Very fast; works with small data (1000s of samples)
 - Con: Less adaptation; may not capture task-specific patterns
 
 **3. Domain Adaptation:**
@@ -1803,7 +1782,7 @@ Can't use public pre-trained models due to licensing or IP concerns (rare).
 **1. Voting (Hardest Ensemble):**
 Train m different models; each predicts; take majority vote.
 
-'''python
+\\python
 from sklearn.ensemble import VotingClassifier
 models = [
     LogisticRegression(),
@@ -1813,8 +1792,7 @@ models = [
 ]
 voting_clf = VotingClassifier(estimators=[('lr', m[0]), ('dt', m[1]), ('rf', m[2]), ('svm', m[3])],
                                 voting='hard')  # or 'soft' for probability averaging
-'''
-
+\\
 - Hard voting: Majority vote (e.g., 3/4 say "cat" → predict "cat")
 - Soft voting: Average predicted probabilities (each model outputs p(y=cat), average them)
 
@@ -1860,8 +1838,7 @@ Train models sequentially; each corrects previous model's errors.
 **4. Stacking (Meta-Learning):**
 Use base models' predictions as features for meta-model.
 
-'''
-Level 0 (Base Models):
+\\Level 0 (Base Models):
   Model A predicts → yhat_A
   Model B predicts → yhat_B
   Model C predicts → yhat_C
@@ -1870,8 +1847,7 @@ Level 1 (Meta-Model):
   New features = [yhat_A, yhat_B, yhat_C]
   Meta-model (e.g., Logistic Regression) trained on these meta-features
   Final prediction = Meta-model([yhat_A, yhat_B, yhat_C])
-'''
-
+\\
 **Why effective:** Meta-model learns which base models to trust when.
 
 **Example:**
@@ -1892,4 +1868,4 @@ Level 1 (Meta-Model):
 
 
 
-`}];function g({current:e,total:t,color:n}){return(0,f.jsx)(`div`,{style:{background:`#e8ecf4`,borderRadius:8,height:6,overflow:`hidden`},children:(0,f.jsx)(`div`,{style:{width:`${e/t*100}%`,height:`100%`,background:n||`#5b7cff`,borderRadius:8,transition:`width 0.4s ease`}})})}function _({unitId:e}){let t=m[e]||[],[n,r]=(0,l.useState)({}),[i,a]=(0,l.useState)(0),o=t.length,s=t[i],c=n[i],u=Object.entries(n).filter(([e,n])=>t[parseInt(e)]?.ans===n).length,d=Object.keys(n).length;function p(e){c===void 0&&r(t=>({...t,[i]:e}))}function h(e){return c===void 0?null:e===s.ans?`#16a34a`:e===c&&c!==s.ans?`#dc2626`:null}function _(e){let t=h(e);return t?t===`#16a34a`?`#dcfce7`:`#fee2e2`:c===void 0?void 0:`#f5f6fa`}return(0,f.jsxs)(`div`,{children:[(0,f.jsxs)(`div`,{style:{display:`flex`,alignItems:`center`,justifyContent:`space-between`,marginBottom:20},children:[(0,f.jsxs)(`div`,{style:{fontSize:13,color:`#6b7280`,fontWeight:500},children:[`Q `,i+1,` / `,o,`  ·  Score: `,u,`/`,d||`—`]}),(0,f.jsxs)(`div`,{style:{display:`flex`,gap:6},children:[(0,f.jsx)(`button`,{onClick:()=>a(Math.max(0,i-1)),style:{padding:`5px 14px`,borderRadius:8,border:`1.5px solid #d1d5db`,background:i===0?`#f3f4f6`:`#fff`,cursor:i===0?`default`:`pointer`,fontSize:13,fontWeight:600,color:i===0?`#9ca3af`:`#374151`},children:`← Prev`}),(0,f.jsx)(`button`,{onClick:()=>a(Math.min(o-1,i+1)),style:{padding:`5px 14px`,borderRadius:8,border:`1.5px solid #d1d5db`,background:i===o-1?`#f3f4f6`:`#fff`,cursor:i===o-1?`default`:`pointer`,fontSize:13,fontWeight:600,color:i===o-1?`#9ca3af`:`#374151`},children:`Next →`})]})]}),(0,f.jsx)(g,{current:i+1,total:o,color:`#5b7cff`}),(0,f.jsxs)(`div`,{style:{marginTop:24,background:`#fff`,borderRadius:14,border:`1.5px solid #e5e7eb`,padding:`22px 24px`,boxShadow:`0 2px 10px rgba(0,0,0,0.04)`},children:[(0,f.jsxs)(`div`,{style:{fontSize:13,fontWeight:700,color:`#5b7cff`,marginBottom:10,textTransform:`uppercase`,letterSpacing:`0.06em`},children:[`Q `,i+1]}),(0,f.jsx)(`p`,{style:{fontSize:15.5,fontWeight:500,color:`#1e293b`,lineHeight:1.65,marginBottom:20},children:s.q}),(0,f.jsx)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:10},children:s.opts.map((e,t)=>{let n=h(t),r=_(t);return(0,f.jsxs)(`button`,{onClick:()=>p(t),style:{textAlign:`left`,padding:`12px 16px`,borderRadius:10,border:`1.5px solid ${n||`#e5e7eb`}`,background:r||`#fafbff`,cursor:c===void 0?`pointer`:`default`,fontSize:14,color:n?n===`#16a34a`?`#15803d`:`#b91c1c`:`#374151`,fontWeight:c!==void 0&&(t===s.ans||t===c)?600:400,transition:`all 0.2s`,lineHeight:1.5,display:`flex`,alignItems:`center`,gap:10},children:[(0,f.jsx)(`span`,{style:{width:22,height:22,borderRadius:`50%`,background:n?n===`#16a34a`?`#16a34a`:`#dc2626`:`#e8ecf4`,color:n?`#fff`:`#9ca3af`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:11,fontWeight:700,flexShrink:0},children:n?n===`#16a34a`?`✓`:`✗`:String.fromCharCode(65+t)}),e]},t)})}),c!==void 0&&(0,f.jsxs)(`div`,{style:{marginTop:16,background:`#f0fdf4`,border:`1.5px solid #bbf7d0`,borderRadius:10,padding:`13px 16px`},children:[(0,f.jsx)(`div`,{style:{fontSize:12,fontWeight:700,color:`#16a34a`,marginBottom:5,textTransform:`uppercase`,letterSpacing:`0.05em`},children:c===s.ans?`✓ Correct!`:`✗ Incorrect`}),(0,f.jsx)(`p`,{style:{fontSize:13.5,color:`#166534`,lineHeight:1.6,margin:0},children:s.exp})]})]}),(0,f.jsx)(`div`,{style:{display:`flex`,flexWrap:`wrap`,gap:4,marginTop:16},children:t.map((e,r)=>{let o=n[r],s=o!==void 0&&t[r].ans===o,c=o!==void 0&&t[r].ans!==o;return(0,f.jsx)(`button`,{onClick:()=>a(r),style:{width:28,height:28,borderRadius:6,border:`1.5px solid ${r===i?`#5b7cff`:s?`#16a34a`:c?`#dc2626`:`#e5e7eb`}`,background:r===i?`#eff3ff`:s?`#dcfce7`:c?`#fee2e2`:`#f9fafb`,fontSize:11,fontWeight:700,color:r===i?`#5b7cff`:s?`#16a34a`:c?`#dc2626`:`#9ca3af`,cursor:`pointer`},children:r+1},r)})}),d>0&&(0,f.jsxs)(`div`,{style:{marginTop:20,padding:`14px 20px`,borderRadius:12,background:`linear-gradient(135deg, #eff3ff, #f0fdf4)`,border:`1.5px solid #c7d2fe`,display:`flex`,alignItems:`center`,justifyContent:`space-between`},children:[(0,f.jsxs)(`span`,{style:{fontSize:14,fontWeight:600,color:`#3730a3`},children:[`Progress: `,d,`/`,o,` answered`]}),(0,f.jsxs)(`span`,{style:{fontSize:14,fontWeight:700,color:u/d>=.7?`#16a34a`:`#dc2626`},children:[`Score: `,u,`/`,d,` (`,Math.round(u/d*100),`%)`]})]})]})}function v(){let[e,t]=(0,l.useState)(null);return(0,f.jsxs)(`div`,{children:[(0,f.jsxs)(`div`,{style:{marginBottom:20,padding:`16px 20px`,background:`linear-gradient(135deg, #f0f4ff, #faf0ff)`,borderRadius:12,border:`1.5px solid #c7d2fe`},children:[(0,f.jsx)(`div`,{style:{fontSize:14,fontWeight:700,color:`#4338ca`,marginBottom:4},children:`📝 30 Long Answer Questions`}),(0,f.jsx)(`div`,{style:{fontSize:13,color:`#6366f1`},children:`Exam-level answers covering all 6 units. Click any question to expand the full answer.`})]}),(0,f.jsx)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:10},children:h.map((n,r)=>(0,f.jsxs)(`div`,{style:{borderRadius:12,border:`1.5px solid ${e===r?`#818cf8`:`#e5e7eb`}`,overflow:`hidden`,background:`#fff`,boxShadow:e===r?`0 2px 16px rgba(99,102,241,0.08)`:`none`},children:[(0,f.jsxs)(`button`,{onClick:()=>t(e===r?null:r),style:{width:`100%`,padding:`15px 18px`,textAlign:`left`,background:`none`,border:`none`,cursor:`pointer`,display:`flex`,alignItems:`flex-start`,gap:12},children:[(0,f.jsx)(`span`,{style:{width:26,height:26,borderRadius:7,background:e===r?`#6366f1`:`#e8ecf4`,color:e===r?`#fff`:`#6b7280`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:11,fontWeight:700,flexShrink:0,marginTop:1},children:r+1}),(0,f.jsx)(`span`,{style:{fontSize:14.5,fontWeight:600,color:e===r?`#4338ca`:`#1e293b`,lineHeight:1.5},children:n.q}),(0,f.jsx)(`span`,{style:{marginLeft:`auto`,fontSize:16,color:e===r?`#6366f1`:`#9ca3af`,flexShrink:0,transform:e===r?`rotate(180deg)`:`none`,transition:`transform 0.2s`},children:`▾`})]}),e===r&&(0,f.jsx)(`div`,{style:{borderTop:`1.5px solid #e0e4f4`,padding:`18px 20px 20px`,background:`#fafbff`},children:(0,f.jsx)(`div`,{style:{fontSize:13.5,color:`#374151`,lineHeight:1.85,whiteSpace:`pre-wrap`,fontFamily:`inherit`},children:n.a.split(/\*\*(.*?)\*\*/g).map((e,t)=>t%2==1?(0,f.jsx)(`strong`,{style:{color:`#1e293b`,fontWeight:700},children:e},t):(0,f.jsx)(`span`,{children:e},t))})})]},r))})]})}function y(){let[e,t]=(0,l.useState)(1),n=p.find(t=>t.id===e);return(0,f.jsxs)(`div`,{style:{minHeight:`100vh`,background:`#f1f3f9`,fontFamily:`'Segoe UI', system-ui, sans-serif`},children:[(0,f.jsx)(`div`,{style:{background:`linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%)`,padding:`0 0 0 0`,boxShadow:`0 4px 24px rgba(67,56,202,0.25)`},children:(0,f.jsxs)(`div`,{style:{maxWidth:900,margin:`0 auto`,padding:`22px 24px 0`},children:[(0,f.jsxs)(`div`,{style:{display:`flex`,alignItems:`center`,gap:14,marginBottom:20},children:[(0,f.jsx)(`div`,{style:{width:42,height:42,borderRadius:12,background:`rgba(255,255,255,0.15)`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:22,backdropFilter:`blur(10px)`},children:`🎓`}),(0,f.jsxs)(`div`,{children:[(0,f.jsx)(`div`,{style:{fontSize:20,fontWeight:800,color:`#fff`,letterSpacing:`-0.02em`},children:`CSE274 ML Practice Quiz`}),(0,f.jsx)(`div`,{style:{fontSize:12.5,color:`rgba(199,210,254,0.85)`,marginTop:1},children:`300 MCQs (50/unit) + 30 Long Answers · All 6 Units`})]})]}),(0,f.jsx)(`div`,{style:{display:`flex`,gap:4,overflowX:`auto`,paddingBottom:0},children:p.map(n=>(0,f.jsxs)(`button`,{onClick:()=>t(n.id),style:{padding:`9px 16px`,borderRadius:`10px 10px 0 0`,border:`none`,background:e===n.id?`#fff`:`rgba(255,255,255,0.08)`,color:e===n.id?`#4338ca`:`rgba(199,210,254,0.8)`,fontWeight:e===n.id?700:500,fontSize:12.5,cursor:`pointer`,whiteSpace:`nowrap`,transition:`all 0.18s`,backdropFilter:`blur(10px)`,display:`flex`,alignItems:`center`,gap:6},children:[(0,f.jsx)(`span`,{children:n.icon}),(0,f.jsx)(`span`,{children:n.label})]},n.id))})]})}),(0,f.jsxs)(`div`,{style:{maxWidth:900,margin:`0 auto`,padding:`28px 24px 60px`},children:[(0,f.jsxs)(`div`,{style:{marginBottom:24,display:`flex`,alignItems:`center`,gap:14},children:[(0,f.jsx)(`div`,{style:{width:46,height:46,borderRadius:12,background:`linear-gradient(135deg, #6366f1, #818cf8)`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:22,boxShadow:`0 4px 14px rgba(99,102,241,0.3)`},children:n.icon}),(0,f.jsxs)(`div`,{children:[(0,f.jsx)(`div`,{style:{fontSize:11,fontWeight:700,color:`#6366f1`,textTransform:`uppercase`,letterSpacing:`0.08em`},children:n.label}),(0,f.jsx)(`div`,{style:{fontSize:22,fontWeight:800,color:`#1e1b4b`,letterSpacing:`-0.02em`},children:n.title})]}),e<=6&&(0,f.jsx)(`div`,{style:{marginLeft:`auto`,background:`#eff3ff`,borderRadius:20,padding:`5px 14px`,fontSize:12.5,fontWeight:700,color:`#4338ca`,border:`1.5px solid #c7d2fe`},children:`50 MCQs`})]}),e<=6?(0,f.jsx)(_,{unitId:e}):(0,f.jsx)(v,{})]})]})}(0,u.createRoot)(document.getElementById(`root`)).render((0,f.jsx)(l.StrictMode,{children:(0,f.jsx)(y,{})}));
+`}];function g({current:e,total:t,color:n}){return(0,f.jsx)(`div`,{style:{background:`#e8ecf4`,borderRadius:8,height:6,overflow:`hidden`},children:(0,f.jsx)(`div`,{style:{width:`${e/t*100}%`,height:`100%`,background:n||`#5b7cff`,borderRadius:8,transition:`width 0.4s ease`}})})}function _({unitId:e}){let t=m[e]||[],[n,r]=(0,l.useState)({}),[i,a]=(0,l.useState)(0),o=t.length,s=t[i],c=n[i],u=Object.entries(n).filter(([e,n])=>t[parseInt(e)]?.ans===n).length,d=Object.keys(n).length;function p(e){c===void 0&&r(t=>({...t,[i]:e}))}function h(e){return c===void 0?null:e===s.ans?`#16a34a`:e===c&&c!==s.ans?`#dc2626`:null}function _(e){let t=h(e);return t?t===`#16a34a`?`#dcfce7`:`#fee2e2`:c===void 0?void 0:`#f5f6fa`}return(0,f.jsxs)(`div`,{children:[(0,f.jsxs)(`div`,{style:{display:`flex`,alignItems:`center`,justifyContent:`space-between`,marginBottom:20},children:[(0,f.jsxs)(`div`,{style:{fontSize:13,color:`#6b7280`,fontWeight:500},children:[`Q `,i+1,` / `,o,`  ·  Score: `,u,`/`,d||`—`]}),(0,f.jsxs)(`div`,{style:{display:`flex`,gap:6},children:[(0,f.jsx)(`button`,{onClick:()=>a(Math.max(0,i-1)),style:{padding:`5px 14px`,borderRadius:8,border:`1.5px solid #d1d5db`,background:i===0?`#f3f4f6`:`#fff`,cursor:i===0?`default`:`pointer`,fontSize:13,fontWeight:600,color:i===0?`#9ca3af`:`#374151`},children:`← Prev`}),(0,f.jsx)(`button`,{onClick:()=>a(Math.min(o-1,i+1)),style:{padding:`5px 14px`,borderRadius:8,border:`1.5px solid #d1d5db`,background:i===o-1?`#f3f4f6`:`#fff`,cursor:i===o-1?`default`:`pointer`,fontSize:13,fontWeight:600,color:i===o-1?`#9ca3af`:`#374151`},children:`Next →`})]})]}),(0,f.jsx)(g,{current:i+1,total:o,color:`#5b7cff`}),(0,f.jsxs)(`div`,{style:{marginTop:24,background:`#fff`,borderRadius:14,border:`1.5px solid #e5e7eb`,padding:`22px 24px`,boxShadow:`0 2px 10px rgba(0,0,0,0.04)`},children:[(0,f.jsxs)(`div`,{style:{fontSize:13,fontWeight:700,color:`#5b7cff`,marginBottom:10,textTransform:`uppercase`,letterSpacing:`0.06em`},children:[`Q `,i+1]}),(0,f.jsx)(`p`,{style:{fontSize:15.5,fontWeight:500,color:`#1e293b`,lineHeight:1.65,marginBottom:20},children:s.q}),(0,f.jsx)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:10},children:s.opts.map((e,t)=>{let n=h(t),r=_(t);return(0,f.jsxs)(`button`,{onClick:()=>p(t),style:{textAlign:`left`,padding:`12px 16px`,borderRadius:10,border:`1.5px solid ${n||`#e5e7eb`}`,background:r||`#fafbff`,cursor:c===void 0?`pointer`:`default`,fontSize:14,color:n?n===`#16a34a`?`#15803d`:`#b91c1c`:`#374151`,fontWeight:c!==void 0&&(t===s.ans||t===c)?600:400,transition:`all 0.2s`,lineHeight:1.5,display:`flex`,alignItems:`center`,gap:10},children:[(0,f.jsx)(`span`,{style:{width:22,height:22,borderRadius:`50%`,background:n?n===`#16a34a`?`#16a34a`:`#dc2626`:`#e8ecf4`,color:n?`#fff`:`#9ca3af`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:11,fontWeight:700,flexShrink:0},children:n?n===`#16a34a`?`✓`:`✗`:String.fromCharCode(65+t)}),e]},t)})}),c!==void 0&&(0,f.jsxs)(`div`,{style:{marginTop:16,background:`#f0fdf4`,border:`1.5px solid #bbf7d0`,borderRadius:10,padding:`13px 16px`},children:[(0,f.jsx)(`div`,{style:{fontSize:12,fontWeight:700,color:`#16a34a`,marginBottom:5,textTransform:`uppercase`,letterSpacing:`0.05em`},children:c===s.ans?`✓ Correct!`:`✗ Incorrect`}),(0,f.jsx)(`p`,{style:{fontSize:13.5,color:`#166534`,lineHeight:1.6,margin:0},children:s.exp})]})]}),(0,f.jsx)(`div`,{style:{display:`flex`,flexWrap:`wrap`,gap:4,marginTop:16},children:t.map((e,r)=>{let o=n[r],s=o!==void 0&&t[r].ans===o,c=o!==void 0&&t[r].ans!==o;return(0,f.jsx)(`button`,{onClick:()=>a(r),style:{width:28,height:28,borderRadius:6,border:`1.5px solid ${r===i?`#5b7cff`:s?`#16a34a`:c?`#dc2626`:`#e5e7eb`}`,background:r===i?`#eff3ff`:s?`#dcfce7`:c?`#fee2e2`:`#f9fafb`,fontSize:11,fontWeight:700,color:r===i?`#5b7cff`:s?`#16a34a`:c?`#dc2626`:`#9ca3af`,cursor:`pointer`},children:r+1},r)})}),d>0&&(0,f.jsxs)(`div`,{style:{marginTop:20,padding:`14px 20px`,borderRadius:12,background:`linear-gradient(135deg, #eff3ff, #f0fdf4)`,border:`1.5px solid #c7d2fe`,display:`flex`,alignItems:`center`,justifyContent:`space-between`},children:[(0,f.jsxs)(`span`,{style:{fontSize:14,fontWeight:600,color:`#3730a3`},children:[`Progress: `,d,`/`,o,` answered`]}),(0,f.jsxs)(`span`,{style:{fontSize:14,fontWeight:700,color:u/d>=.7?`#16a34a`:`#dc2626`},children:[`Score: `,u,`/`,d,` (`,Math.round(u/d*100),`%)`]})]})]})}function v(){let[e,t]=(0,l.useState)(null),n=e=>e.split(/```[\w]*\n([\s\S]*?)```/g).map((e,t)=>t%2==1?(0,f.jsx)(`pre`,{style:{background:`#1e293b`,color:`#f8fafc`,padding:`12px`,borderRadius:`8px`,overflowX:`auto`,fontFamily:`monospace`,fontSize:`13px`,marginTop:`10px`,marginBottom:`10px`,whiteSpace:`pre-wrap`,wordBreak:`break-all`},children:(0,f.jsx)(`code`,{children:e})},t):e.split(/\*\*(.*?)\*\*/g).map((e,n)=>n%2==1?(0,f.jsx)(`strong`,{style:{color:`#1e293b`,fontWeight:700},children:e},`${t}-${n}`):(0,f.jsx)(`span`,{children:e},`${t}-${n}`)));return(0,f.jsxs)(`div`,{children:[(0,f.jsxs)(`div`,{style:{marginBottom:20,padding:`16px 20px`,background:`linear-gradient(135deg, #f0f4ff, #faf0ff)`,borderRadius:12,border:`1.5px solid #c7d2fe`},children:[(0,f.jsx)(`div`,{style:{fontSize:14,fontWeight:700,color:`#4338ca`,marginBottom:4},children:`📝 30 Long Answer Questions`}),(0,f.jsx)(`div`,{style:{fontSize:13,color:`#6366f1`},children:`Exam-level answers covering all 6 units. Click any question to expand the full answer.`})]}),(0,f.jsx)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:10},children:h.map((r,i)=>(0,f.jsxs)(`div`,{style:{borderRadius:12,border:`1.5px solid ${e===i?`#818cf8`:`#e5e7eb`}`,overflow:`hidden`,background:`#fff`,boxShadow:e===i?`0 2px 16px rgba(99,102,241,0.08)`:`none`},children:[(0,f.jsxs)(`button`,{onClick:()=>t(e===i?null:i),style:{width:`100%`,padding:`15px 18px`,textAlign:`left`,background:`none`,border:`none`,cursor:`pointer`,display:`flex`,alignItems:`flex-start`,gap:12},children:[(0,f.jsx)(`span`,{style:{width:26,height:26,borderRadius:7,background:e===i?`#6366f1`:`#e8ecf4`,color:e===i?`#fff`:`#6b7280`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:11,fontWeight:700,flexShrink:0,marginTop:1},children:i+1}),(0,f.jsx)(`span`,{style:{fontSize:14.5,fontWeight:600,color:e===i?`#4338ca`:`#1e293b`,lineHeight:1.5},children:r.q}),(0,f.jsx)(`span`,{style:{marginLeft:`auto`,fontSize:16,color:e===i?`#6366f1`:`#9ca3af`,flexShrink:0,transform:e===i?`rotate(180deg)`:`none`,transition:`transform 0.2s`},children:`▾`})]}),e===i&&(0,f.jsx)(`div`,{style:{borderTop:`1.5px solid #e0e4f4`,padding:`18px 20px 20px`,background:`#fafbff`},children:(0,f.jsx)(`div`,{style:{fontSize:13.5,color:`#374151`,lineHeight:1.85,whiteSpace:`pre-wrap`,fontFamily:`inherit`},children:n(r.a)})})]},i))})]})}function y(){let[e,t]=(0,l.useState)(1),n=p.find(t=>t.id===e);return(0,f.jsxs)(`div`,{style:{minHeight:`100vh`,background:`#f1f3f9`,fontFamily:`'Segoe UI', system-ui, sans-serif`},children:[(0,f.jsx)(`div`,{style:{background:`linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%)`,padding:`0 0 0 0`,boxShadow:`0 4px 24px rgba(67,56,202,0.25)`},children:(0,f.jsxs)(`div`,{style:{maxWidth:900,margin:`0 auto`,padding:`22px 24px 0`},children:[(0,f.jsxs)(`div`,{style:{display:`flex`,alignItems:`center`,gap:14,marginBottom:20},children:[(0,f.jsx)(`div`,{style:{width:42,height:42,borderRadius:12,background:`rgba(255,255,255,0.15)`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:22,backdropFilter:`blur(10px)`},children:`🎓`}),(0,f.jsxs)(`div`,{children:[(0,f.jsx)(`div`,{style:{fontSize:20,fontWeight:800,color:`#fff`,letterSpacing:`-0.02em`},children:`CSE274 ML Practice Quiz`}),(0,f.jsx)(`div`,{style:{fontSize:12.5,color:`rgba(199,210,254,0.85)`,marginTop:1},children:`300 MCQs (50/unit) + 30 Long Answers · All 6 Units`})]})]}),(0,f.jsx)(`div`,{style:{display:`flex`,gap:4,overflowX:`auto`,paddingBottom:0},children:p.map(n=>(0,f.jsxs)(`button`,{onClick:()=>t(n.id),style:{padding:`9px 16px`,borderRadius:`10px 10px 0 0`,border:`none`,background:e===n.id?`#fff`:`rgba(255,255,255,0.08)`,color:e===n.id?`#4338ca`:`rgba(199,210,254,0.8)`,fontWeight:e===n.id?700:500,fontSize:12.5,cursor:`pointer`,whiteSpace:`nowrap`,transition:`all 0.18s`,backdropFilter:`blur(10px)`,display:`flex`,alignItems:`center`,gap:6},children:[(0,f.jsx)(`span`,{children:n.icon}),(0,f.jsx)(`span`,{children:n.label})]},n.id))})]})}),(0,f.jsxs)(`div`,{style:{maxWidth:900,margin:`0 auto`,padding:`28px 24px 60px`},children:[(0,f.jsxs)(`div`,{style:{marginBottom:24,display:`flex`,alignItems:`center`,gap:14},children:[(0,f.jsx)(`div`,{style:{width:46,height:46,borderRadius:12,background:`linear-gradient(135deg, #6366f1, #818cf8)`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:22,boxShadow:`0 4px 14px rgba(99,102,241,0.3)`},children:n.icon}),(0,f.jsxs)(`div`,{children:[(0,f.jsx)(`div`,{style:{fontSize:11,fontWeight:700,color:`#6366f1`,textTransform:`uppercase`,letterSpacing:`0.08em`},children:n.label}),(0,f.jsx)(`div`,{style:{fontSize:22,fontWeight:800,color:`#1e1b4b`,letterSpacing:`-0.02em`},children:n.title})]}),e<=6&&(0,f.jsx)(`div`,{style:{marginLeft:`auto`,background:`#eff3ff`,borderRadius:20,padding:`5px 14px`,fontSize:12.5,fontWeight:700,color:`#4338ca`,border:`1.5px solid #c7d2fe`},children:`50 MCQs`})]}),e<=6?(0,f.jsx)(_,{unitId:e}):(0,f.jsx)(v,{})]})]})}(0,u.createRoot)(document.getElementById(`root`)).render((0,f.jsx)(l.StrictMode,{children:(0,f.jsx)(y,{})}));
