@@ -341,7 +341,7 @@ const LONG_QA = [
 
 The Pipeline chains preprocessing steps with the model. During cross-validation, 'pipeline.fit()' is called only on each fold's training data — the scaler/imputer never sees validation data.
 
-'''python
+\\\python
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
@@ -352,7 +352,7 @@ pipe = Pipeline([
     ('model', LogisticRegression())
 ])
 scores = cross_val_score(pipe, X_train, y_train, cv=5)
-'''
+\\\
 
 This ensures each preprocessing step is learned from training data only, producing valid, unbiased validation metrics.
 
@@ -690,9 +690,9 @@ Accuracy is worthless here — predicting "all legitimate" gives 99.5% accuracy 
 
 **Step 3: Baseline — No Balancing**
 Always establish a baseline with 'class_weight='balanced'' first — often sufficient.
-'''python
+\\\python
 lr = LogisticRegression(class_weight='balanced')
-'''
+\\\
 Result: automatically weights fraud class inversely proportional to frequency. No data manipulation needed.
 
 **Step 4: Resampling Techniques**
@@ -702,19 +702,19 @@ b) **Random Undersampling:** Drop majority (legitimate) samples randomly. Fast b
 
 c) **Combined (SMOTEENN):** SMOTE oversampling + Edited Nearest Neighbors cleaning — often best of both worlds.
 
-'''python
+\\\python
 from imblearn.pipeline import Pipeline
 from imblearn.over_sampling import SMOTE
 pipe = Pipeline([('smote', SMOTE(sampling_strategy=0.1)), ('model', XGBClassifier())])
-'''
+\\\
 
 **Step 5: Threshold Tuning**
 Default threshold 0.5 is rarely optimal. Adjust based on business objective:
-'''python
+\\\python
 probas = model.predict_proba(X_test)[:,1]
 threshold = 0.3  # catch more fraud, accept more false alarms
 preds = (probas >= threshold).astype(int)
-'''
+\\\
 Plot Precision-Recall curve to visualize the tradeoff at all thresholds.
 
 **Step 6: Model Selection**
@@ -970,9 +970,9 @@ Each tree can be evaluated on its ~37% unused samples. Average OOB error across 
 5. **Difference Features:** y(t) − y(t−1) — rate of change (useful for non-stationary series)
 
 **ML Approach for Time-Series:**
-'''
+\\\
 Create lag/rolling features → treat as regular tabular ML → use XGBoost/RF
-'''
+\\\
 This approach often outperforms classical ARIMA models for complex, multi-variable time series.
 
 **Temporal Cross-Validation:**
@@ -1089,11 +1089,11 @@ A single 80/20 split has high variance — a lucky/unlucky split can give mislea
 2. For each fold i: train on all folds except i; evaluate on fold i
 3. Average metrics across all k folds
 
-'''
+\\\
 Fold 1: [Val] [Tr] [Tr] [Tr] [Tr]
 Fold 2: [Tr] [Val] [Tr] [Tr] [Tr]
 ...
-'''
+\\\
 
 **k=5 (most common):** 5 train/val splits; good bias-variance balance.
 **k=10:** More reliable estimate but 2x slower.
@@ -1112,11 +1112,11 @@ Without stratification (3-class, 80/10/10 distribution): one fold might get 0 sa
 
 **TimeSeriesSplit:**
 For temporal data — must respect time ordering:
-'''
+\\\
 Split 1: Train [1-100], Val [101-120]
 Split 2: Train [1-120], Val [121-140]
 Split 3: Train [1-140], Val [141-160]
-'''
+\\\
 Expanding training window; each fold tests on strictly future data. Standard K-Fold would put future data into training — temporal leakage.
 
 **Nested Cross-Validation:**
@@ -1124,12 +1124,12 @@ For hyperparameter tuning without test set:
 - Outer loop: k-fold for unbiased performance estimate
 - Inner loop: CV for hyperparameter selection (on each outer train set)
 
-'''python
+\\\python
 outer_cv = StratifiedKFold(5)
 inner_cv = StratifiedKFold(3)
 grid_search = GridSearchCV(model, params, cv=inner_cv)
 outer_scores = cross_val_score(grid_search, X, y, cv=outer_cv)
-'''
+\\\
 
 **Choosing CV Strategy:**
 | Data Type | CV Method |
@@ -1207,12 +1207,12 @@ Too few configurations searched → suboptimal model. Using the test set for sel
 **Grid Search (GridSearchCV):**
 Exhaustively tries every combination of specified parameter values.
 
-'''python
+\\\python
 from sklearn.model_selection import GridSearchCV
 params = {'max_depth': [3, 5, 7], 'learning_rate': [0.01, 0.1, 0.3]}
 gs = GridSearchCV(XGBClassifier(), params, cv=5, scoring='f1')
 gs.fit(X_train, y_train)
-'''
+\\\
 
 - Combinations: 3 × 3 = 9; with CV=5: 45 model fits
 - **Advantage:** Guaranteed to find best combination within the grid
@@ -1222,12 +1222,12 @@ gs.fit(X_train, y_train)
 **Randomized Search (RandomizedSearchCV):**
 Randomly samples n_iter combinations from the parameter distributions.
 
-'''python
+\\\python
 from sklearn.model_selection import RandomizedSearchCV
 from scipy.stats import uniform, randint
 params = {'max_depth': randint(3, 10), 'learning_rate': uniform(0.01, 0.3)}
 rs = RandomizedSearchCV(XGBClassifier(), params, n_iter=50, cv=5, random_state=42)
-'''
+\\\
 
 - With n_iter=50 and CV=5: exactly 250 model fits regardless of search space size
 - Key insight: in high-dimensional spaces, random search explores more of the space than grid search for the same compute budget
@@ -1238,7 +1238,7 @@ rs = RandomizedSearchCV(XGBClassifier(), params, n_iter=50, cv=5, random_state=4
 **Bayesian Optimization (Optuna, Hyperopt):**
 Builds a probabilistic surrogate model (e.g., Tree Parzen Estimator or Gaussian Process) of the objective function, then uses an acquisition function (Expected Improvement) to decide which hyperparameters to evaluate next.
 
-'''python
+\\\python
 import optuna
 def objective(trial):
     params = {'max_depth': trial.suggest_int('max_depth', 3, 10),
@@ -1246,7 +1246,7 @@ def objective(trial):
     return cross_val_score(XGBClassifier(**params), X_tr, y_tr, cv=5).mean()
 study = optuna.create_study(direction='maximize')
 study.optimize(objective, n_trials=100)
-'''
+\\\
 
 - Intelligently focuses evaluations on promising regions after early exploration
 - **Advantage:** Much more efficient — finds better results than random search in same n_trials; handles conditional parameters
@@ -1300,14 +1300,14 @@ Labeled anomaly data is extremely rare and expensive. An unsupervised approach l
 
 **Real-World Application — Network Intrusion Detection:**
 
-'''
+\\\
 1. Collect normal network traffic features: packet_size, connection_duration, protocol, bytes_in/out
 2. Train Isolation Forest on normal traffic only (or contamination=0.01 for 1% expected attacks)
 3. Score new connections in real-time: anomaly_score = model.decision_function(features)
 4. Flag connections with score < threshold for security review
 5. Monitor false positive rate — tune contamination to reduce analyst burden
 6. Retrain monthly as normal traffic patterns evolve
-'''
+\\\
 
 **Evaluation Challenge:**
 True anomaly labels are rare. Use:
@@ -1388,11 +1388,11 @@ Information Gain biases toward features with many values (like unique IDs). Gain
 - Look for obvious data quality issues (impossible values, duplicates)
 
 **Step 3 — Train-Test Split (FIRST, before any preprocessing):**
-'''python
+\\\python
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.20, stratify=y, random_state=42
 )
-'''
+\\\
 Stratify ensures class proportions preserved. Test set is locked — never touched until final evaluation.
 
 **Step 4 — Preprocessing (fit on train only, transform both):**
@@ -1401,7 +1401,7 @@ Stratify ensures class proportions preserved. Test set is locked — never touch
 - Scale numericals: StandardScaler for linear models; not needed for trees
 - Handle imbalance: SMOTE on training data inside pipeline
 
-'''python
+\\\python
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 preprocessor = ColumnTransformer([
@@ -1409,7 +1409,7 @@ preprocessor = ColumnTransformer([
     ('cat', Pipeline([('impute', SimpleImputer(strategy='most_frequent')),
                       ('ohe', OneHotEncoder(handle_unknown='ignore'))]), cat_cols)
 ])
-'''
+\\\
 
 **Step 5 — Feature Engineering:**
 - Create lag features: last_login_days_ago, purchase_count_30d, avg_ticket_response_hours
@@ -2094,13 +2094,13 @@ Two-level approach:
 4. Meta-learner (usually simple: Logistic Regression, Ridge) learns how to optimally combine base models
 
 **Example:**
-'''
+\\\
 Base Model 1 (LR): P(class=1) = 0.7
 Base Model 2 (SVM): P(class=1) = 0.8
 Base Model 3 (RF): P(class=1) = 0.6
 → Stack: [0.7, 0.8, 0.6] (new feature vector)
 → Meta-learner predicts final class using this vector
-'''
+\\\
 
 **Why Stacking Works:**
 - Base models capture different patterns
@@ -2215,11 +2215,11 @@ Load pre-trained weights → replace final layer (1000-class ImageNet → 10-cla
 
 **2. Feature Extraction:**
 Load pre-trained model → remove final layer → use as fixed feature extractor.
-'''python
+\\\python
 base_model = ResNet50(weights='imagenet', include_top=False)
 features = base_model.predict(X)  # Extract features from pre-trained model
 new_model = LogisticRegression().fit(features, y)  # Train simple classifier on top
-'''
+\\\
 - Pro: Very fast; works with small data (1000s of samples)
 - Con: Less adaptation; may not capture task-specific patterns
 
@@ -2277,7 +2277,7 @@ Can't use public pre-trained models due to licensing or IP concerns (rare).
 **1. Voting (Hardest Ensemble):**
 Train m different models; each predicts; take majority vote.
 
-'''python
+\\\python
 from sklearn.ensemble import VotingClassifier
 models = [
     LogisticRegression(),
@@ -2287,7 +2287,7 @@ models = [
 ]
 voting_clf = VotingClassifier(estimators=[('lr', m[0]), ('dt', m[1]), ('rf', m[2]), ('svm', m[3])],
                                 voting='hard')  # or 'soft' for probability averaging
-'''
+\\\
 
 - Hard voting: Majority vote (e.g., 3/4 say "cat" → predict "cat")
 - Soft voting: Average predicted probabilities (each model outputs p(y=cat), average them)
@@ -2334,7 +2334,7 @@ Train models sequentially; each corrects previous model's errors.
 **4. Stacking (Meta-Learning):**
 Use base models' predictions as features for meta-model.
 
-'''
+\\\
 Level 0 (Base Models):
   Model A predicts → yhat_A
   Model B predicts → yhat_B
@@ -2344,7 +2344,7 @@ Level 1 (Meta-Model):
   New features = [yhat_A, yhat_B, yhat_C]
   Meta-model (e.g., Logistic Regression) trained on these meta-features
   Final prediction = Meta-model([yhat_A, yhat_B, yhat_C])
-'''
+\\\
 
 **Why effective:** Meta-model learns which base models to trust when.
 
@@ -2505,6 +2505,24 @@ function MCQSection({ unitId }) {
 function LongSection() {
   const [open, setOpen] = useState(null);
 
+  const renderText = (text) => {
+    return text.split(/```[\w]*\n([\s\S]*?)```/g).map((block, i) => {
+      if (i % 2 === 1) {
+        return (
+          <pre key={i} style={{ background: "#1e293b", color: "#f8fafc", padding: "12px", borderRadius: "8px", overflowX: "auto", fontFamily: "monospace", fontSize: "13px", marginTop: "10px", marginBottom: "10px", whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+            <code>{block}</code>
+          </pre>
+        );
+      } else {
+        return block.split(/\*\*(.*?)\*\*/g).map((part, pi) =>
+          pi % 2 === 1
+            ? <strong key={`${i}-${pi}`} style={{ color: "#1e293b", fontWeight: 700 }}>{part}</strong>
+            : <span key={`${i}-${pi}`}>{part}</span>
+        );
+      }
+    });
+  };
+
   return (
     <div>
       <div style={{ marginBottom: 20, padding: "16px 20px", background: "linear-gradient(135deg, #f0f4ff, #faf0ff)", borderRadius: 12, border: "1.5px solid #c7d2fe" }}>
@@ -2525,11 +2543,7 @@ function LongSection() {
             {open === i && (
               <div style={{ borderTop: "1.5px solid #e0e4f4", padding: "18px 20px 20px", background: "#fafbff" }}>
                 <div style={{ fontSize: 13.5, color: "#374151", lineHeight: 1.85, whiteSpace: "pre-wrap", fontFamily: "inherit" }}>
-                  {item.a.split(/\*\*(.*?)\*\*/g).map((part, pi) =>
-                    pi % 2 === 1
-                      ? <strong key={pi} style={{ color: "#1e293b", fontWeight: 700 }}>{part}</strong>
-                      : <span key={pi}>{part}</span>
-                  )}
+                  {renderText(item.a)}
                 </div>
               </div>
             )}
