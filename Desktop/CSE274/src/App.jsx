@@ -1,4 +1,8 @@
 import { useState, useEffect } from "react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -2505,24 +2509,6 @@ function MCQSection({ unitId }) {
 function LongSection() {
   const [open, setOpen] = useState(null);
 
-  const renderText = (text) => {
-    return text.split(/```[\w]*\n([\s\S]*?)```/g).map((block, i) => {
-      if (i % 2 === 1) {
-        return (
-          <pre key={i} style={{ background: "#1e293b", color: "#f8fafc", padding: "12px", borderRadius: "8px", overflowX: "auto", fontFamily: "monospace", fontSize: "13px", marginTop: "10px", marginBottom: "10px", whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
-            <code>{block}</code>
-          </pre>
-        );
-      } else {
-        return block.split(/\*\*(.*?)\*\*/g).map((part, pi) =>
-          pi % 2 === 1
-            ? <strong key={`${i}-${pi}`} style={{ color: "#1e293b", fontWeight: 700 }}>{part}</strong>
-            : <span key={`${i}-${pi}`}>{part}</span>
-        );
-      }
-    });
-  };
-
   return (
     <div>
       <div style={{ marginBottom: 20, padding: "16px 20px", background: "linear-gradient(135deg, #f0f4ff, #faf0ff)", borderRadius: 12, border: "1.5px solid #c7d2fe" }}>
@@ -2541,9 +2527,57 @@ function LongSection() {
               <span style={{ marginLeft: "auto", fontSize: 16, color: open === i ? "#6366f1" : "#9ca3af", flexShrink: 0, transform: open === i ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▾</span>
             </button>
             {open === i && (
-              <div style={{ borderTop: "1.5px solid #e0e4f4", padding: "18px 20px 20px", background: "#fafbff" }}>
-                <div style={{ fontSize: 13.5, color: "#374151", lineHeight: 1.85, whiteSpace: "pre-wrap", fontFamily: "inherit" }}>
-                  {renderText(item.a)}
+              <div style={{ borderTop: "1.5px solid #e0e4f4", padding: "18px 20px 20px", background: "#fafbff", textAlign: "left" }}>
+                <div style={{ fontSize: 14, color: "#374151", lineHeight: 1.6, fontFamily: "inherit", textAlign: "left" }} className="markdown-body">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      code({node, inline, className, children, ...props}) {
+                        const match = /language-(\w+)/.exec(className || '')
+                        return !inline ? (
+                          <SyntaxHighlighter
+                            {...props}
+                            children={String(children).replace(/\n$/, '')}
+                            style={vscDarkPlus}
+                            language={match ? match[1] : 'javascript'}
+                            PreTag="div"
+                            customStyle={{ borderRadius: "8px", margin: "14px 0", fontSize: "13px", padding: "16px" }}
+                          />
+                        ) : (
+                          <code {...props} className={className} style={{ background: "#e5e7eb", padding: "2px 6px", borderRadius: "4px", fontSize: "13px", color: "#b91c1c" }}>
+                            {children}
+                          </code>
+                        )
+                      },
+                      p({node, ...props}) {
+                        return <p style={{ marginBottom: "12px" }} {...props} />
+                      },
+                      ul({node, ...props}) {
+                        return <ul style={{ marginBottom: "12px", paddingLeft: "24px" }} {...props} />
+                      },
+                      ol({node, ...props}) {
+                        return <ol style={{ marginBottom: "12px", paddingLeft: "24px" }} {...props} />
+                      },
+                      li({node, ...props}) {
+                        return <li style={{ marginBottom: "6px" }} {...props} />
+                      },
+                      table({node, ...props}) {
+                        return (
+                          <div style={{ overflowX: "auto", margin: "16px 0" }}>
+                            <table style={{ minWidth: "100%", borderCollapse: "collapse", border: "1px solid #e5e7eb", textAlign: "left" }} {...props} />
+                          </div>
+                        )
+                      },
+                      th({node, ...props}) {
+                        return <th style={{ padding: "10px", borderBottom: "2px solid #e5e7eb", backgroundColor: "#f3f4f6", fontWeight: 600 }} {...props} />
+                      },
+                      td({node, ...props}) {
+                        return <td style={{ padding: "10px", borderBottom: "1px solid #e5e7eb" }} {...props} />
+                      }
+                    }}
+                  >
+                    {item.a}
+                  </ReactMarkdown>
                 </div>
               </div>
             )}
