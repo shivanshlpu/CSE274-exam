@@ -6,14 +6,6 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
-import { MCQ, LONG_QA } from "./data.js";
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-
-// ─── DATA ────────────────────────────────────────────────────────────────────
-
 const UNITS = [
   { id: 1, label: "Unit I", title: "Data Pre-processing", icon: "📊" },
   { id: 2, label: "Unit II", title: "Feature Engineering", icon: "🔧" },
