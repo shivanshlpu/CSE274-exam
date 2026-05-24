@@ -6,6 +6,13 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
+import { MCQ, LONG_QA } from "./data.js";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+// ─── DATA ────────────────────────────────────────────────────────────────────
 
 const UNITS = [
   { id: 1, label: "Unit I", title: "Data Pre-processing", icon: "📊" },
@@ -15,6 +22,7 @@ const UNITS = [
   { id: 5, label: "Unit V", title: "Ensemble Learning", icon: "🌲" },
   { id: 6, label: "Unit VI", title: "Unsupervised Learning", icon: "🔮" },
   { id: 7, label: "Mixed", title: "Long Answer Questions", icon: "📝" },
+  { id: 8, label: "Mock Test", title: "Sample Paper Simulator", icon: "📜" },
 ];
 
 function ProgressBar({ current, total, color }) {
@@ -31,8 +39,8 @@ function ProgressBar({ current, total, color }) {
   );
 }
 
-function MCQSection({ unitId }) {
-  const questions = MCQ[unitId] || [];
+function MCQSection({ unitId, questionsList }) {
+  const questions = questionsList || MCQ[unitId] || [];
   const [answers, setAnswers] = useState({});
   const [current, setCurrent] = useState(0);
   const total = questions.length;
@@ -146,17 +154,20 @@ function MCQSection({ unitId }) {
   );
 }
 
-function LongSection() {
+function LongSection({ customQuestions }) {
   const [open, setOpen] = useState(null);
+  const questionsToRender = customQuestions || LONG_QA;
 
   return (
     <div>
-      <div style={{ marginBottom: 20, padding: "16px 20px", background: "linear-gradient(135deg, #f0f4ff, #faf0ff)", borderRadius: 12, border: "1.5px solid #c7d2fe" }}>
-        <div style={{ fontSize: 14, fontWeight: 700, color: "#4338ca", marginBottom: 4 }}>📝 30 Long Answer Questions</div>
-        <div style={{ fontSize: 13, color: "#6366f1" }}>Exam-level answers covering all 6 units. Click any question to expand the full answer.</div>
-      </div>
+      {!customQuestions && (
+        <div style={{ marginBottom: 20, padding: "16px 20px", background: "linear-gradient(135deg, #f0f4ff, #faf0ff)", borderRadius: 12, border: "1.5px solid #c7d2fe" }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#4338ca", marginBottom: 4 }}>📝 30 Long Answer Questions</div>
+          <div style={{ fontSize: 13, color: "#6366f1" }}>Exam-level answers covering all 6 units. Click any question to expand the full answer.</div>
+        </div>
+      )}
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {LONG_QA.map((item, i) => (
+        {questionsToRender.map((item, i) => (
           <div key={i} style={{ borderRadius: 12, border: `1.5px solid ${open === i ? "#818cf8" : "#e5e7eb"}`, overflow: "hidden", background: "#fff", boxShadow: open === i ? "0 2px 16px rgba(99,102,241,0.08)" : "none" }}>
             <button onClick={() => setOpen(open === i ? null : i)}
               style={{ width: "100%", padding: "15px 18px", textAlign: "left", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "flex-start", gap: 12 }}>
@@ -228,6 +239,42 @@ function LongSection() {
   );
 }
 
+function MockExamSection() {
+  const [examData, setExamData] = useState(null);
+
+  useEffect(() => {
+    // Generate random 30 MCQs and 5 Long QAs
+    const allMcqs = Object.values(MCQ).flat();
+    const shuffledMcqs = [...allMcqs].sort(() => 0.5 - Math.random());
+    const selectedMcqs = shuffledMcqs.slice(0, 30);
+    
+    const shuffledLong = [...LONG_QA].sort(() => 0.5 - Math.random());
+    const selectedLong = shuffledLong.slice(0, 5);
+    
+    setExamData({ mcqs: selectedMcqs, long: selectedLong });
+  }, []);
+
+  if (!examData) return null;
+
+  return (
+    <div>
+      <div style={{ marginBottom: 24, padding: "18px 24px", background: "#fff", borderRadius: 14, border: "2px dashed #c7d2fe", textAlign: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.03)" }}>
+        <h3 style={{ color: "#4338ca", margin: "0 0 8px 0", fontSize: 18 }}>Part A: Objective Questions (30 Marks)</h3>
+        <p style={{ margin: 0, fontSize: 14, color: "#6b7280" }}>30 randomly selected questions from all units. Negative marking applies (0.25 marks deducted for wrong answers).</p>
+      </div>
+      
+      <MCQSection questionsList={examData.mcqs} />
+      
+      <div style={{ marginTop: 40, marginBottom: 24, padding: "18px 24px", background: "#fff", borderRadius: 14, border: "2px dashed #c7d2fe", textAlign: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.03)" }}>
+        <h3 style={{ color: "#4338ca", margin: "0 0 8px 0", fontSize: 18 }}>Part B: Long Answer Questions (40 Marks)</h3>
+        <p style={{ margin: 0, fontSize: 14, color: "#6b7280" }}>Attempt any 4 out of these 5 randomly selected questions. (10 marks each).</p>
+      </div>
+      
+      <LongSection customQuestions={examData.long} />
+    </div>
+  );
+}
+
 // ─── MAIN APP ────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -281,9 +328,16 @@ export default function App() {
               50 MCQs
             </div>
           )}
+          {activeUnit === 8 && (
+            <div style={{ marginLeft: "auto", background: "#eff3ff", borderRadius: 20, padding: "5px 14px", fontSize: 12.5, fontWeight: 700, color: "#4338ca", border: "1.5px solid #c7d2fe" }}>
+              70 Marks
+            </div>
+          )}
         </div>
 
-        {activeUnit <= 6 ? <MCQSection key={activeUnit} unitId={activeUnit} /> : <LongSection />}
+        {activeUnit <= 6 && <MCQSection key={activeUnit} unitId={activeUnit} />}
+        {activeUnit === 7 && <LongSection />}
+        {activeUnit === 8 && <MockExamSection />}
       </div>
     </div>
   );
