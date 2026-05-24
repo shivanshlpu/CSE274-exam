@@ -3,85 +3,85 @@ export const MCQ = {
     {
       q: "A dataset has 'City' (Delhi/Mumbai/Pune) and 'Rating' (Poor/Good/Excellent). Which encoding pair is most appropriate?",
       opts: [
+        "Ordinal Encoding for City, One-Hot for Rating",
         "One-Hot for City, Label Encoding for Rating",
         "Label Encoding for both",
-        "Ordinal Encoding for City, One-Hot for Rating",
         "Target Encoding for both"
       ],
-      ans: 0,
+      ans: 1,
       exp: "City is nominal — no natural order — so One-Hot is correct. Rating is ordinal (Poor < Good < Excellent), so Label/Ordinal encoding is correct."
     },
     {
       q: "You fit a StandardScaler on the full dataset before splitting train/test. This is an example of:",
       opts: [
-        "Target Leakage",
-        "Train-Test Contamination",
         "Temporal Leakage",
-        "Overfitting"
+        "Target Leakage",
+        "Overfitting",
+        "Train-Test Contamination"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Fitting any preprocessor on the full dataset before splitting leaks test statistics into training — this is train-test contamination, a form of data leakage."
     },
     {
       q: "A salary column has values [25000, 50000, 75000, 100000, 500000]. Which scaler is most robust to the ₹500000 outlier?",
       opts: [
-        "StandardScaler",
-        "MinMaxScaler",
         "RobustScaler",
-        "Log Transform"
+        "Log Transform",
+        "MinMaxScaler",
+        "StandardScaler"
       ],
-      ans: 2,
+      ans: 0,
       exp: "RobustScaler uses the median and IQR (Q3−Q1), so extreme outliers barely affect it. MinMaxScaler and StandardScaler are heavily distorted by the ₹500000 value."
     },
     {
       q: "A fraud detection dataset has 97% non-fraud and 3% fraud. A model predicts 'non-fraud' always. Its accuracy is:",
       opts: [
         "97%",
-        "97%",
         "3%",
-        "50%"
+        "50%",
+        "97%"
       ],
-      ans: 1,
+      ans: 0,
       exp: "The model achieves 97% accuracy but has 0% recall for fraud. For imbalanced data, accuracy is misleading. Use F1-score or ROC-AUC instead."
     },
     {
       q: "SMOTE creates new minority samples by:",
       opts: [
-        "Duplicating existing minority samples randomly",
         "Interpolating between existing minority samples and their k-nearest neighbors",
-        "Removing majority class samples",
-        "Assigning higher loss weights to minority samples"
+        "Assigning higher loss weights to minority samples",
+        "Duplicating existing minority samples randomly",
+        "Removing majority class samples"
       ],
-      ans: 1,
+      ans: 0,
       exp: "SMOTE (Synthetic Minority Over-sampling Technique) creates synthetic points along the line segment between a minority sample and one of its k-nearest minority neighbors."
     },
     {
       q: "Which data type has a true absolute zero, making ratios meaningful?",
       opts: [
         "Nominal",
-        "Ordinal",
+        "Ratio",
         "Interval",
-        "Ratio"
+        "Ordinal"
       ],
-      ans: 3,
+      ans: 1,
       exp: "Ratio scale has an absolute zero (e.g., height, weight). 80 kg is twice 40 kg. Interval scale (like temperature in °C) has no true zero, so ratios are not meaningful."
     },
     {
       q: "You're building a credit scoring model and accidentally include the 'loan_repaid' column to predict 'loan_default'. This is:",
       opts: [
+        "Multicollinearity",
         "Train-test contamination",
-        "Target leakage",
         "Temporal leakage",
-        "Multicollinearity"
+        "Target leakage"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Including a feature derived from or highly correlated with the target is target leakage. 'Loan_repaid' is essentially the target variable rephrased — this feature won't be available when predicting new loans."
     },
     {
       q: "A column has 40% missing values. What is generally recommended?",
       opts: [
-        "Always drop the column",
         "Always impute with mean",
+        "Always drop the column",
         "Consider domain context; dropping may be better if missingness is not random",
         "Use KNN imputation always"
       ],
@@ -91,34 +91,34 @@ export const MCQ = {
     {
       q: "For a right-skewed salary distribution, which transformation helps normalize it?",
       opts: [
-        "StandardScaler",
         "Log Transform",
         "MinMaxScaler",
-        "Winsorization"
+        "Winsorization",
+        "StandardScaler"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Log Transform compresses large values and expands small ones, pulling right-skewed distributions toward normality. It's the go-to for salary, income, and count data."
     },
     {
       q: "The IQR method marks a value as an outlier if:",
       opts: [
-        "|z| > 2",
-        "x < Q1 − 1.5×IQR or x > Q3 + 1.5×IQR",
         "x < μ − 2σ or x > μ + 2σ",
-        "x is in the top 5%"
+        "x is in the top 5%",
+        "x < Q1 − 1.5×IQR or x > Q3 + 1.5×IQR",
+        "|z| > 2"
       ],
-      ans: 1,
+      ans: 2,
       exp: "The IQR rule defines fences at Q1 − 1.5×IQR (lower) and Q3 + 1.5×IQR (upper). Points outside these fences are considered outliers. It doesn't assume normality."
     },
     {
       q: "Which imputation strategy is most sophisticated and preserves relationships between variables?",
       opts: [
+        "MICE",
         "Mean imputation",
-        "Median imputation",
         "KNN imputation",
-        "MICE"
+        "Median imputation"
       ],
-      ans: 3,
+      ans: 0,
       exp: "MICE iteratively models each feature with missing values as a function of other features, preserving inter-feature correlations. KNN is good but doesn't model joint distributions."
     },
     {
@@ -126,32 +126,32 @@ export const MCQ = {
       opts: [
         "Removing them",
         "Replacing them with mean",
-        "Clipping them to the fence values (e.g., upper/lower bounds)",
-        "Using a separate indicator variable"
+        "Using a separate indicator variable",
+        "Clipping them to the fence values (e.g., upper/lower bounds)"
       ],
-      ans: 2,
+      ans: 3,
       exp: "Winsorization clips extreme values to defined boundary values (e.g., the IQR fence). Unlike deletion, it keeps the observation in the dataset while reducing outlier impact."
     },
     {
       q: "You're predicting tomorrow's stock price. You accidentally split your time-series data randomly. This causes:",
       opts: [
+        "Temporal leakage",
         "Target leakage",
         "Train-test contamination",
-        "Temporal leakage",
         "Multicollinearity"
       ],
-      ans: 2,
+      ans: 0,
       exp: "Random splitting of time-series data allows 'future' observations into the training set, which is temporal leakage. Always split time-series by time boundary."
     },
     {
       q: "For a 'temperature' column measured in Celsius, the scale of measurement is:",
       opts: [
+        "Interval",
         "Ratio",
         "Ordinal",
-        "Interval",
         "Nominal"
       ],
-      ans: 2,
+      ans: 0,
       exp: "Celsius is an interval scale — differences are meaningful (20°C is 10° warmer than 10°C), but there is no true zero (0°C is not 'no temperature'). Kelvin would be ratio scale."
     },
     {
@@ -168,87 +168,87 @@ export const MCQ = {
     {
       q: "Which sklearn tool helps prevent data leakage by ensuring preprocessing is fit only on training data during cross-validation?",
       opts: [
-        "GridSearchCV",
+        "Both Pipeline and ColumnTransformer",
         "Pipeline",
-        "ColumnTransformer",
-        "Both Pipeline and ColumnTransformer"
+        "GridSearchCV",
+        "ColumnTransformer"
       ],
-      ans: 3,
+      ans: 0,
       exp: "sklearn Pipeline chains preprocessing with the model so that fit() only sees training data in each fold of cross-validation. ColumnTransformer applies different transforms to different columns, also within a Pipeline."
     },
     {
       q: "A feature 'is_employed' is 1 for 99% of rows. What should you do?",
       opts: [
         "Keep it",
-        "Drop it using VarianceThreshold",
         "Apply SMOTE to balance it",
-        "Standardize it"
+        "Standardize it",
+        "Drop it using VarianceThreshold"
       ],
-      ans: 1,
+      ans: 3,
       exp: "A near-constant feature has near-zero variance and provides almost no discriminative information. VarianceThreshold in sklearn automatically removes such features."
     },
     {
       q: "When the minority class in SMOTE is very small (e.g., 10 samples), what is a risk?",
       opts: [
-        "Overfitting to the original minority samples",
-        "Generating duplicate majority samples",
         "Reducing model accuracy to 50%",
-        "Causing train-test contamination"
+        "Causing train-test contamination",
+        "Generating duplicate majority samples",
+        "Overfitting to the original minority samples"
       ],
-      ans: 0,
+      ans: 3,
       exp: "With very few real minority samples, SMOTE generates synthetic points between those few points. If those samples are noisy or unrepresentative, SMOTE amplifies those errors — risking overfit."
     },
     {
       q: "For neural networks and image data, which scaling method is most commonly used?",
       opts: [
-        "StandardScaler",
         "RobustScaler",
-        "MinMaxScaler",
-        "Log Transform"
+        "StandardScaler",
+        "Log Transform",
+        "MinMaxScaler"
       ],
-      ans: 2,
+      ans: 3,
       exp: "MinMaxScaler maps values to [0,1], matching the typical [0,1] or [−1,1] range expected by neural networks and for pixel normalization. StandardScaler is preferred for linear models and SVMs."
     },
     {
       q: "Structured data is best described as:",
       opts: [
-        "Data requiring deep learning to process",
-        "Data that fits neatly into rows and columns",
         "Text and image data",
-        "Data with temporal ordering"
+        "Data with temporal ordering",
+        "Data requiring deep learning to process",
+        "Data that fits neatly into rows and columns"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Structured data has a predefined schema and fits into relational tables (CSV, SQL). Unstructured data (text, images, audio) doesn't have this neat row-column format."
     },
     {
       q: "A data scientist fits a MinMaxScaler on all data, splits 80/20, then trains a model. The validation accuracy is 95%. This accuracy is:",
       opts: [
-        "Reliable",
-        "Inflated due to data leakage",
         "Deflated because MinMax hurts performance",
-        "Accurate only if the dataset is balanced"
+        "Accurate only if the dataset is balanced",
+        "Reliable",
+        "Inflated due to data leakage"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Fitting MinMaxScaler before splitting means the scaler 'saw' test data — the min/max computed includes test points. Validation metrics are therefore optimistically biased."
     },
     {
       q: "You have an 'Education' column: High School < Bachelor < Master < PhD. Which encoding is correct?",
       opts: [
-        "One-Hot Encoding",
-        "Label Encoding with arbitrary numbers",
+        "Target Encoding",
         "Ordinal Encoding with the correct order mapping",
-        "Target Encoding"
+        "Label Encoding with arbitrary numbers",
+        "One-Hot Encoding"
       ],
-      ans: 2,
+      ans: 1,
       exp: "Education has a natural order. OrdinalEncoder with categories=[['High School','Bachelor','Master','PhD']] correctly maps 0→1→2→3, preserving that ordering."
     },
     {
       q: "The Z-score method for outlier detection assumes:",
       opts: [
-        "Data follows a uniform distribution",
+        "All features are scaled",
         "Data is approximately normally distributed",
         "Data has no missing values",
-        "All features are scaled"
+        "Data follows a uniform distribution"
       ],
       ans: 1,
       exp: "Z-score = (x − μ)/σ only makes sense when data is (approximately) normal. |Z| > 3 captures the tails of a normal distribution. For skewed data, IQR is preferred."
@@ -256,10 +256,10 @@ export const MCQ = {
     {
       q: "class_weight='balanced' in sklearn logistic regression:",
       opts: [
-        "Removes majority class samples",
+        "Scales all features to balance them",
         "Creates synthetic minority samples",
         "Increases the penalty for misclassifying minority class",
-        "Scales all features to balance them"
+        "Removes majority class samples"
       ],
       ans: 2,
       exp: "class_weight='balanced' automatically adjusts loss weights inversely proportional to class frequencies, penalizing minority class misclassification more heavily."
@@ -267,21 +267,21 @@ export const MCQ = {
     {
       q: "Which metric should you NEVER rely on for an imbalanced medical diagnosis dataset?",
       opts: [
-        "F1-Score",
         "Accuracy",
+        "F1-Score",
         "ROC-AUC",
         "Precision-Recall AUC"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Accuracy is misleading for imbalanced data. A model predicting 'no disease' 100% of the time could achieve 99% accuracy if only 1% of patients are sick — yet it catches zero actual cases."
     },
     {
       q: "Random Undersampling handles imbalance by:",
       opts: [
-        "Generating new minority samples",
+        "Both generating and removing samples",
         "Removing majority samples to match minority size",
         "Adjusting loss weights",
-        "Both generating and removing samples"
+        "Generating new minority samples"
       ],
       ans: 1,
       exp: "Random undersampling removes majority class rows randomly until classes are balanced. It's fast and simple but risks losing important majority-class information."
@@ -290,9 +290,9 @@ export const MCQ = {
       q: "A value in a dataset is 'John,Smith' while all others are numeric. This is a:",
       opts: [
         "Missing value",
-        "Outlier",
+        "Categorical data",
         "Inconsistency / data quality issue",
-        "Categorical data"
+        "Outlier"
       ],
       ans: 2,
       exp: "A non-numeric value in a numeric column is a data quality issue (inconsistency/corruption), not strictly a missing value or statistical outlier. Requires cleaning."
@@ -301,11 +301,11 @@ export const MCQ = {
       q: "When is it appropriate to impute missing values with mode?",
       opts: [
         "For continuous numerical columns",
-        "For categorical columns",
         "For time-series data",
+        "For categorical columns",
         "For image data"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Mode imputation (most frequent value) is appropriate for categorical features. For continuous features, mean or median imputation is standard."
     },
     {
@@ -322,34 +322,34 @@ export const MCQ = {
     {
       q: "You want to encode a 'Country' column with 150 unique values for a linear model. One-Hot Encoding would create:",
       opts: [
-        "1 column",
-        "2 columns",
         "150 columns (or 149 with drop='first')",
-        "log(150) columns"
+        "log(150) columns",
+        "1 column",
+        "2 columns"
       ],
-      ans: 2,
+      ans: 0,
       exp: "One-Hot Encoding creates one binary column per category. 150 countries → 150 columns (149 with drop='first' to avoid multicollinearity). Consider Target Encoding for high-cardinality features."
     },
     {
       q: "The 'dummy variable trap' in One-Hot Encoding occurs when:",
       opts: [
-        "Too many categories cause memory issues",
         "All one-hot columns are linearly dependent",
         "The model overfits to rare categories",
-        "Encoding is applied before splitting"
+        "Encoding is applied before splitting",
+        "Too many categories cause memory issues"
       ],
-      ans: 1,
+      ans: 0,
       exp: "With k categories and k columns, one column is perfectly predictable from the others (they sum to 1). This causes multicollinearity. Fix: drop one column (drop='first')."
     },
     {
       q: "Target Encoding replaces a category with:",
       opts: [
-        "Its integer rank",
         "The mean of the target variable for that category",
-        "A random number between 0 and 1",
-        "Binary 0/1 based on frequency"
+        "Its integer rank",
+        "Binary 0/1 based on frequency",
+        "A random number between 0 and 1"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Target Encoding maps each category to the mean target value for that category. E.g., City='Delhi' → mean(target for Delhi rows). It's compact and powerful but risks leakage without cross-validation."
     },
     {
@@ -357,30 +357,30 @@ export const MCQ = {
       opts: [
         "Decision Tree",
         "Random Forest",
-        "K-Nearest Neighbors",
-        "XGBoost"
+        "XGBoost",
+        "K-Nearest Neighbors"
       ],
-      ans: 2,
+      ans: 3,
       exp: "KNN computes Euclidean distances. Without scaling, Income dominates distance calculations completely (since its range is 1000x larger). Tree-based models are invariant to scale."
     },
     {
       q: "Which is NOT a step in a proper ML preprocessing pipeline?",
       opts: [
-        "Split data first",
         "Fit scaler only on training data",
-        "Transform both train and test using the same fitted scaler",
-        "Fit scaler on test data to get better test accuracy"
+        "Fit scaler on test data to get better test accuracy",
+        "Split data first",
+        "Transform both train and test using the same fitted scaler"
       ],
-      ans: 3,
+      ans: 1,
       exp: "Fitting the scaler on test data is exactly data leakage. The scaler must be fit only on training data, then used to transform both train and test sets."
     },
     {
       q: "MCAR stands for:",
       opts: [
-        "Missing Completely And Randomly",
+        "Model Calibration And Regularization",
         "Missing Completely At Random",
-        "Multiple Categorical And Regression",
-        "Model Calibration And Regularization"
+        "Missing Completely And Randomly",
+        "Multiple Categorical And Regression"
       ],
       ans: 1,
       exp: "MCAR — Missing Completely At Random — means missingness has no relationship with the data itself. Under MCAR, simple imputation methods are unbiased. MAR and MNAR are more complex."
@@ -388,10 +388,10 @@ export const MCQ = {
     {
       q: "A bank dataset has 0.1% fraud. After SMOTE, what is the training set proportion roughly?",
       opts: [
+        "10% fraud always",
         "Still 0.1% fraud",
-        "50% fraud",
         "It depends on the SMOTE sampling_strategy parameter",
-        "10% fraud always"
+        "50% fraud"
       ],
       ans: 2,
       exp: "SMOTE's sampling_strategy parameter controls the target ratio. Default is to balance classes (50/50), but you can set it to e.g. 0.1 (minority becomes 10% of majority). It's configurable."
@@ -399,12 +399,12 @@ export const MCQ = {
     {
       q: "Which approach to missing values preserves the most information?",
       opts: [
-        "Drop rows with any missing value",
         "Drop columns with > 20% missing",
         "Impute with MICE",
+        "Drop rows with any missing value",
         "Fill all with 0"
       ],
-      ans: 2,
+      ans: 1,
       exp: "MICE (Multiple Imputation by Chained Equations) models each feature's missingness using the other features iteratively, preserving data relationships and producing the least biased results."
     },
     {
@@ -422,20 +422,20 @@ export const MCQ = {
       q: "To correctly implement cross-validation with scaling, you should:",
       opts: [
         "Scale the entire dataset before CV",
+        "Not scale if using CV",
         "Include scaling in a Pipeline so it refits per fold",
-        "Scale only the training set once before CV",
-        "Not scale if using CV"
+        "Scale only the training set once before CV"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Including scaling in a Pipeline ensures the scaler is fit only on each fold's training data and then applied to the validation fold — preventing any data leakage across folds."
     },
     {
       q: "A data point with Z-score of −4.2 is considered:",
       opts: [
+        "An imputed value",
         "A normal value slightly below average",
-        "A mild outlier",
         "A strong outlier (|Z| > 3)",
-        "An imputed value"
+        "A mild outlier"
       ],
       ans: 2,
       exp: "Z-score of −4.2 means the value is 4.2 standard deviations below the mean. Since |Z| > 3, it is classified as a strong outlier under the Z-score method."
@@ -444,44 +444,44 @@ export const MCQ = {
       q: "Which encoding technique encodes a category into its binary representation using log2(k) bits?",
       opts: [
         "One-Hot Encoding",
-        "Label Encoding",
         "Binary Encoding",
+        "Label Encoding",
         "Ordinal Encoding"
       ],
-      ans: 2,
+      ans: 1,
       exp: "Binary Encoding first assigns integer codes, then represents each integer in binary, producing log2(k) columns. This is more compact than One-Hot for medium-cardinality categoricals."
     },
     {
       q: "An e-commerce site has 'Purchase Category' with 500 unique values. The best encoding for a tree model is:",
       opts: [
-        "One-Hot",
-        "Target Encoding",
+        "Binary Encoding",
         "Ordinal Encoding",
-        "Binary Encoding"
+        "Target Encoding",
+        "One-Hot"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Target Encoding maps each category to the mean target value — producing just 1 column regardless of cardinality. For tree models with high-cardinality categoricals, it's very effective."
     },
     {
       q: "The main drawback of Random Undersampling compared to SMOTE is:",
       opts: [
+        "It increases dimensionality",
         "It's computationally expensive",
-        "It can discard potentially useful majority class data",
         "It creates noisy synthetic samples",
-        "It increases dimensionality"
+        "It can discard potentially useful majority class data"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Random undersampling removes majority class samples randomly, potentially discarding important patterns. SMOTE retains all data but adds synthetic minority samples."
     },
     {
       q: "In sklearn, you should call .fit_transform() on which set?",
       opts: [
-        "Test set only",
         "Both sets together",
-        "Training set only",
-        "Validation set only"
+        "Validation set only",
+        "Test set only",
+        "Training set only"
       ],
-      ans: 2,
+      ans: 3,
       exp: "fit_transform() computes statistics (mean, std, min, max) AND transforms data. This should only happen on the training set. On test set, use .transform() only — with the already-fitted object."
     },
     {
@@ -489,19 +489,19 @@ export const MCQ = {
       opts: [
         "One-Hot Encoding",
         "Label Encoding",
-        "No encoding needed",
-        "Ordinal Encoding"
+        "Ordinal Encoding",
+        "No encoding needed"
       ],
-      ans: 2,
+      ans: 3,
       exp: "A binary feature that's already coded as 0/1 is already in a usable numeric form. No encoding is needed. ML models can directly use it."
     },
     {
       q: "Sensor data recording temperature every second for 30 days is best classified as:",
       opts: [
-        "Structured nominal data",
+        "Discrete numerical data",
         "Unstructured data",
         "Time-series / temporal data",
-        "Discrete numerical data"
+        "Structured nominal data"
       ],
       ans: 2,
       exp: "Regularly-timed sequential measurements (sensor, stock price, EEG) constitute time-series data. Temporal ordering matters — it cannot be shuffled without losing meaning."
@@ -510,30 +510,30 @@ export const MCQ = {
       q: "The best evaluation metric for a heavily imbalanced medical diagnosis task is:",
       opts: [
         "Accuracy",
-        "Precision-Recall AUC (PR-AUC)",
+        "Silhouette Score",
         "Mean Squared Error",
-        "Silhouette Score"
+        "Precision-Recall AUC (PR-AUC)"
       ],
-      ans: 1,
+      ans: 3,
       exp: "PR-AUC focuses on the minority (positive) class, measuring the tradeoff between Precision and Recall. It's more informative than ROC-AUC when the negative class overwhelmingly dominates."
     },
     {
       q: "Missing value imputation should always be done:",
       opts: [
         "Before train-test split",
-        "After train-test split, fitting imputer on train only",
+        "Using the test set statistics",
         "On the test set independently",
-        "Using the test set statistics"
+        "After train-test split, fitting imputer on train only"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Imputation should be fit (compute mean/median/mode) on the training data ONLY, then applied to both train and test. Doing it before splitting leaks test statistics into training."
     },
     {
       q: "For a linear regression model, which preprocessing step is REQUIRED?",
       opts: [
-        "Encoding categorical features",
         "Handling missing values",
         "Scaling numerical features",
+        "Encoding categorical features",
         "All of the above"
       ],
       ans: 3,
@@ -543,11 +543,11 @@ export const MCQ = {
       q: "You observe that 'house_price' has a few values > 5 crore in a dataset where most are < 1 crore. After training a linear model, these outliers will:",
       opts: [
         "Have no effect",
-        "Strongly pull the regression line toward them",
+        "Improve model accuracy",
         "Be automatically removed by the model",
-        "Improve model accuracy"
+        "Strongly pull the regression line toward them"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Linear regression minimizes sum of squared errors. Outliers contribute disproportionately (error² is huge) and pull the fitted line toward them, degrading overall predictions."
     }
   ],
@@ -555,65 +555,65 @@ export const MCQ = {
     {
       q: "A feature 'city_encoded' has variance of 0.0001. Using VarianceThreshold(threshold=0.01), this feature will be:",
       opts: [
-        "Kept",
-        "Removed",
+        "Imputed",
         "Scaled",
-        "Imputed"
+        "Removed",
+        "Kept"
       ],
-      ans: 1,
+      ans: 2,
       exp: "VarianceThreshold removes features whose variance falls below the threshold. Variance 0.0001 < 0.01 threshold → feature is removed. It's essentially constant and conveys no information."
     },
     {
       q: "Two features, 'weight_kg' and 'weight_lbs', have a correlation of 0.99. What should you do?",
       opts: [
-        "Keep both",
-        "Drop one to reduce redundancy and avoid multicollinearity",
+        "Use target encoding on both",
         "Apply PCA to both",
-        "Use target encoding on both"
+        "Drop one to reduce redundancy and avoid multicollinearity",
+        "Keep both"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Highly correlated features (|r| > 0.85–0.90) are redundant. Keeping both wastes resources and causes multicollinearity in linear models. Drop one (typically keep the more interpretable one)."
     },
     {
       q: "Recursive Feature Elimination (RFE) works by:",
       opts: [
+        "Searching all feature subsets exhaustively",
         "Computing variance and dropping low-variance features",
         "Training model, dropping weakest feature, repeating",
-        "Using PCA to extract components",
-        "Searching all feature subsets exhaustively"
+        "Using PCA to extract components"
       ],
-      ans: 1,
+      ans: 2,
       exp: "RFE trains a model on all features, identifies the least important feature (via coefficients or importances), removes it, and repeats — backward elimination until the desired number of features remains."
     },
     {
       q: "A Random Forest reports feature importance of 0.45 for 'petal_length'. This means:",
       opts: [
-        "45% of data points use this feature",
         "This feature reduces Gini impurity by 45% on average across all trees",
         "This feature has 45% correlation with the target",
+        "45% of data points use this feature",
         "45% of trees used this feature for the first split"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Tree-based feature importance measures the total reduction in Gini impurity (or MSE) attributed to that feature, averaged across all trees and normalized to sum to 1."
     },
     {
       q: "PCA must be applied after which preprocessing step?",
       opts: [
-        "One-Hot Encoding",
-        "StandardScaler",
+        "Train-test split only",
         "SMOTE",
-        "Train-test split only"
+        "One-Hot Encoding",
+        "StandardScaler"
       ],
-      ans: 1,
+      ans: 3,
       exp: "PCA is sensitive to scale — a feature with range 0–1000 will dominate components over one with range 0–1. Always StandardScale before PCA. (And after splitting.)"
     },
     {
       q: "LDA (Linear Discriminant Analysis) is a supervised technique that maximizes:",
       opts: [
-        "Explained variance of features",
+        "Number of retained dimensions",
         "Separation between class means relative to within-class variance",
         "Distance from origin",
-        "Number of retained dimensions"
+        "Explained variance of features"
       ],
       ans: 1,
       exp: "LDA maximizes the ratio of between-class variance to within-class variance — the Fisher criterion. This ensures the projected data is most discriminative for classification."
@@ -623,32 +623,32 @@ export const MCQ = {
       opts: [
         "4",
         "3",
-        "2",
-        "1"
+        "1",
+        "2"
       ],
-      ans: 2,
+      ans: 3,
       exp: "LDA produces at most min(n_classes − 1, n_features) components. With 3 classes, n_classes − 1 = 2. So maximum 2 LDA components regardless of feature count."
     },
     {
       q: "PCA with 2 components on Iris data captures 95.8% variance. This means:",
       opts: [
-        "2% of data is noise",
         "Two components explain 95.8% of total data spread",
         "Only 2 features are useful",
-        "The other 2 PCA components are correlated"
+        "The other 2 PCA components are correlated",
+        "2% of data is noise"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Explained variance ratio = 95.8% means 2 principal components capture 95.8% of total variance in the dataset. The remaining 4.2% in components 3 and 4 is mostly noise or minor variation."
     },
     {
       q: "The Curse of Dimensionality refers to:",
       opts: [
-        "Too many classes in the target variable",
         "Data becoming sparse and distances losing meaning as features increase",
-        "High correlation between features",
-        "Model taking too long to train"
+        "Model taking too long to train",
+        "Too many classes in the target variable",
+        "High correlation between features"
       ],
-      ans: 1,
+      ans: 0,
       exp: "As dimensionality increases exponentially, the data volume grows faster than data points can fill it — data becomes sparse, distances become meaningless, and models require exponentially more data."
     },
     {
@@ -656,8 +656,8 @@ export const MCQ = {
       opts: [
         "All features and removes one at a time",
         "No features and adds one at a time based on performance",
-        "PCA components and selects top ones",
-        "Random subset and refines"
+        "Random subset and refines",
+        "PCA components and selects top ones"
       ],
       ans: 1,
       exp: "Forward Selection begins with no features, adds the single feature that most improves model performance, then continues adding features one by one until a stopping criterion is met."
@@ -665,54 +665,54 @@ export const MCQ = {
     {
       q: "Backward Elimination is preferred over Forward Selection when:",
       opts: [
-        "Dataset is very large with millions of samples",
-        "Number of features is manageable and interaction effects matter",
         "Features are all uncorrelated",
-        "Only one feature is needed"
+        "Only one feature is needed",
+        "Dataset is very large with millions of samples",
+        "Number of features is manageable and interaction effects matter"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Backward elimination starts with all features and considers all interactions from the start. Forward selection may miss interactions. When you have manageable features, backward gives more thorough results."
     },
     {
       q: "A feature 'transaction_month_sin' is created from 'transaction_month' using sin(2π·month/12). This is an example of:",
       opts: [
-        "Feature selection",
-        "Target encoding",
+        "PCA transformation",
         "Cyclical feature encoding / feature creation",
-        "PCA transformation"
+        "Feature selection",
+        "Target encoding"
       ],
-      ans: 2,
+      ans: 1,
       exp: "Cyclical encoding using sin/cos converts cyclic features (month, hour, day-of-week) into continuous representations that preserve the circular nature (December is close to January)."
     },
     {
       q: "You create a feature 'age_squared' from 'age'. This is called:",
       opts: [
+        "Target leakage",
         "Dimensionality reduction",
-        "Polynomial feature creation",
         "Binary encoding",
-        "Target leakage"
+        "Polynomial feature creation"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Adding polynomial features (x², x³, x·y interaction terms) is polynomial feature creation/expansion. It helps linear models capture non-linear relationships without changing the algorithm."
     },
     {
       q: "VarianceThreshold with threshold=0 removes:",
       opts: [
         "All features",
-        "Features with exactly zero variance",
+        "Correlated features",
         "Features with below-average variance",
-        "Correlated features"
+        "Features with exactly zero variance"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Threshold=0 removes only constant features (same value in all rows, variance=0). These carry zero information. A higher threshold removes near-constant features too."
     },
     {
       q: "In PCA, the first principal component is the direction of:",
       opts: [
-        "Maximum correlation with the target",
+        "Smallest eigenvalue of the covariance matrix",
         "Maximum explained variance in the data",
         "Minimum distance from the mean",
-        "Smallest eigenvalue of the covariance matrix"
+        "Maximum correlation with the target"
       ],
       ans: 1,
       exp: "PC1 is the eigenvector of the covariance matrix corresponding to the largest eigenvalue — it captures the direction of greatest variance in the data."
@@ -720,10 +720,10 @@ export const MCQ = {
     {
       q: "Feature extraction vs Feature selection: which statement is correct?",
       opts: [
-        "Both create new features from scratch",
+        "Both reduce to a fixed number of features",
         "Selection picks a subset; extraction creates new transformed features",
-        "Extraction picks a subset; selection creates new features",
-        "Both reduce to a fixed number of features"
+        "Both create new features from scratch",
+        "Extraction picks a subset; selection creates new features"
       ],
       ans: 1,
       exp: "Feature Selection picks a subset of original features (e.g., RFE, VarianceThreshold). Feature Extraction creates new features by transforming originals (e.g., PCA components, polynomial terms)."
@@ -732,31 +732,31 @@ export const MCQ = {
       q: "You have 100 features and train a Random Forest. Feature importance sums to 1.0. You keep top features with importance > 0.02. How many features do you keep at minimum?",
       opts: [
         "At least 2",
-        "Could be any number",
         "Always 50",
+        "Could be any number",
         "Always 20"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Feature importances sum to 1.0 and are unevenly distributed. If a few features dominate (e.g., one has 0.45), you might keep far fewer than 50. The threshold 0.02 just filters by individual contribution."
     },
     {
       q: "Target encoding on a 'City' column with cross-validation prevents:",
       opts: [
+        "High dimensionality",
         "Variance inflation",
         "Overfitting due to target leakage",
-        "Multicollinearity",
-        "High dimensionality"
+        "Multicollinearity"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Without cross-validation, target encoding can cause leakage: the encoded value for a row's city uses that row's target to compute the mean. CV-based target encoding computes means on out-of-fold data."
     },
     {
       q: "PCA is NOT appropriate when:",
       opts: [
-        "You want to visualize high-dimensional data",
-        "Features are all categorical and haven't been numerically encoded",
         "You want to compress 100 features to 5",
-        "You want to remove multicollinearity"
+        "Features are all categorical and haven't been numerically encoded",
+        "You want to remove multicollinearity",
+        "You want to visualize high-dimensional data"
       ],
       ans: 1,
       exp: "PCA operates on numeric data and covariance matrices. Raw categorical features can't be directly fed to PCA — they must be encoded first. PCA loses interpretability but is fine for the other goals."
@@ -765,20 +765,20 @@ export const MCQ = {
       q: "LDA is preferred over PCA for classification preprocessing because:",
       opts: [
         "LDA is faster",
-        "LDA uses class label information to maximize discriminability",
         "LDA can handle more components",
+        "LDA uses class label information to maximize discriminability",
         "LDA doesn't require scaling"
       ],
-      ans: 1,
+      ans: 2,
       exp: "LDA is supervised — it uses the class labels to find axes that maximize between-class separation relative to within-class spread. PCA is unsupervised and ignores the labels."
     },
     {
       q: "A feature 'bmi' is derived from existing features 'weight' and 'height'. Creating it is called:",
       opts: [
-        "Feature selection",
+        "Backward elimination",
         "Domain knowledge-based feature creation",
-        "Dimensionality reduction",
-        "Backward elimination"
+        "Feature selection",
+        "Dimensionality reduction"
       ],
       ans: 1,
       exp: "Creating 'bmi = weight/height²' from existing features using domain knowledge is feature engineering / feature creation. It encodes expert knowledge into a compact, meaningful signal."
@@ -787,64 +787,64 @@ export const MCQ = {
       q: "Mutual information in feature selection measures:",
       opts: [
         "Linear correlation between features",
-        "The reduction in uncertainty about one variable given another",
         "The variance of a feature",
+        "The reduction in uncertainty about one variable given another",
         "The covariance matrix eigenvalue"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Mutual Information quantifies how much knowing one variable reduces uncertainty about another. Unlike Pearson correlation, it captures non-linear dependencies — ideal for complex feature-target relationships."
     },
     {
       q: "After PCA, the components are:",
       opts: [
-        "Original features renamed",
-        "Orthogonal (uncorrelated) linear combinations of original features",
+        "Eigenvalues of the covariance matrix",
         "Standardized versions of original features",
-        "Eigenvalues of the covariance matrix"
+        "Orthogonal (uncorrelated) linear combinations of original features",
+        "Original features renamed"
       ],
-      ans: 1,
+      ans: 2,
       exp: "PCA components are eigenvectors of the covariance matrix — orthogonal to each other (uncorrelated), and are linear combinations of original features. They point in directions of maximum variance."
     },
     {
       q: "You apply RFE with a Logistic Regression estimator and request 5 features. After running, the model will have been trained:",
       opts: [
-        "Once on all features",
-        "Once on 5 features",
         "n_features − 4 times",
-        "Only during CV"
+        "Once on 5 features",
+        "Only during CV",
+        "Once on all features"
       ],
-      ans: 2,
+      ans: 0,
       exp: "RFE with step=1 trains and evaluates the model once per feature removal iteration. Starting from n features down to 5 features: n−5 training steps. With step > 1, fewer steps."
     },
     {
       q: "Correlation-based feature removal should use |r| threshold of:",
       opts: [
         "0.1",
+        "Always 1.0",
         "0.5",
-        "0.85–0.95",
-        "Always 1.0"
+        "0.85–0.95"
       ],
-      ans: 2,
+      ans: 3,
       exp: "Common practice removes one of a pair when |Pearson r| > 0.85–0.90. Lower thresholds remove too many useful features; requiring 1.0 catches only perfect duplicates."
     },
     {
       q: "When two features have |r| = 0.90, which one should you drop?",
       opts: [
-        "Always drop the second one alphabetically",
         "Drop the one with lower correlation to the target variable",
-        "Drop the one with lower variance",
-        "Always drop the numerical one"
+        "Always drop the second one alphabetically",
+        "Always drop the numerical one",
+        "Drop the one with lower variance"
       ],
-      ans: 1,
+      ans: 0,
       exp: "When breaking a high-correlation pair, keep the feature more correlated with the target (more predictive). The other adds redundant information."
     },
     {
       q: "Explained variance ratio in PCA sums to:",
       opts: [
-        "The number of components chosen",
+        "The largest eigenvalue",
         "The number of original features",
         "Exactly 1.0 (100%)",
-        "The largest eigenvalue"
+        "The number of components chosen"
       ],
       ans: 2,
       exp: "All explained variance ratios across all possible components sum to 1.0 (100%). When you choose k components, you capture the sum of their k ratios — the rest is discarded."
@@ -852,42 +852,42 @@ export const MCQ = {
     {
       q: "The 'feature_importances_' attribute is available in:",
       opts: [
+        "KNeighborsClassifier",
         "LogisticRegression",
         "SVM",
-        "RandomForestClassifier",
-        "KNeighborsClassifier"
+        "RandomForestClassifier"
       ],
-      ans: 2,
+      ans: 3,
       exp: "feature_importances_ is available in tree-based models: DecisionTree, RandomForest, GradientBoosting, XGBoost. Linear models have 'coef_' instead. KNN and SVM (non-linear) have neither directly."
     },
     {
       q: "You derive a rolling 7-day average of sales as a new feature for a prediction model. This is:",
       opts: [
+        "A form of PCA",
         "Target leakage if computed before splitting by time",
         "Always valid preprocessing",
-        "A form of PCA",
         "Binary encoding"
       ],
-      ans: 0,
+      ans: 1,
       exp: "Rolling averages computed without a time split can leak future information into the training set. They must be computed using only past data — fit on train, carefully applied to test."
     },
     {
       q: "SelectKBest in sklearn selects features based on:",
       opts: [
-        "Manual specification by the data scientist",
         "A scoring function applied to each feature independently",
-        "Sequential model-based forward selection",
-        "PCA component loadings"
+        "Manual specification by the data scientist",
+        "PCA component loadings",
+        "Sequential model-based forward selection"
       ],
-      ans: 1,
+      ans: 0,
       exp: "SelectKBest applies a univariate scoring function to each feature vs the target independently, ranks features by score, and selects the top k. It does NOT model feature interactions."
     },
     {
       q: "A feature with near-zero variance should be removed because:",
       opts: [
-        "It will cause numerical overflow",
-        "It provides almost no information and can destabilize some models",
         "It always causes multicollinearity",
+        "It provides almost no information and can destabilize some models",
+        "It will cause numerical overflow",
         "It makes gradient descent diverge"
       ],
       ans: 1,
@@ -896,32 +896,32 @@ export const MCQ = {
     {
       q: "The number of output features of PolynomialFeatures(degree=2) on 2 input features is:",
       opts: [
-        "2",
         "4",
         "6",
-        "3"
+        "3",
+        "2"
       ],
-      ans: 2,
+      ans: 1,
       exp: "For 2 features and degree 2: constant (1), x1, x2, x1², x1·x2, x2² = 6 features. Formula: C(n+d, d) = C(2+2,2) = 6. This grows rapidly with more features or higher degree."
     },
     {
       q: "In industry, feature selection is important mainly because:",
       opts: [
-        "ML models require exactly 10 features",
-        "Fewer relevant features reduce training time, prevent overfitting, and improve interpretability",
+        "All algorithms perform equally with any number of features",
         "Regulators require fewer features in all models",
-        "All algorithms perform equally with any number of features"
+        "Fewer relevant features reduce training time, prevent overfitting, and improve interpretability",
+        "ML models require exactly 10 features"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Feature selection improves model efficiency, reduces overfitting by removing noise, speeds up training and inference, and makes models easier to interpret and maintain."
     },
     {
       q: "The 'drop one' strategy in correlation removal: if A and B have |r|=0.95, and A has r=0.7 with target while B has r=0.6 with target, which do you keep?",
       opts: [
         "A",
-        "B",
+        "Drop both",
         "Keep both",
-        "Drop both"
+        "B"
       ],
       ans: 0,
       exp: "Keep A because it has a stronger direct relationship with the target (0.7 > 0.6). B is redundant — A already captures that information — and B adds less predictive value."
@@ -929,12 +929,12 @@ export const MCQ = {
     {
       q: "Embedding layers in neural networks are a form of:",
       opts: [
+        "Target encoding",
         "Feature selection",
         "Feature extraction for categorical data",
-        "Variance thresholding",
-        "Target encoding"
+        "Variance thresholding"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Embeddings learn dense low-dimensional vector representations of categories (used heavily in NLP/recommender systems). They are learned feature extractors — a more powerful alternative to One-Hot encoding."
     },
     {
@@ -952,11 +952,11 @@ export const MCQ = {
       q: "Which statement about PCA is FALSE?",
       opts: [
         "PCA requires feature scaling before application",
-        "PCA is a supervised technique using class labels",
         "PCA components are orthogonal to each other",
+        "PCA is a supervised technique using class labels",
         "PCA can be used for dimensionality reduction before clustering"
       ],
-      ans: 1,
+      ans: 2,
       exp: "PCA is UNSUPERVISED — it finds directions of maximum variance without using any class labels. LDA is the supervised equivalent. The other statements about PCA are all true."
     },
     {
@@ -964,8 +964,8 @@ export const MCQ = {
       opts: [
         "Is always target leakage",
         "Is a domain-knowledge derived interaction feature",
-        "Must be removed by VarianceThreshold",
-        "Should be target encoded"
+        "Should be target encoded",
+        "Must be removed by VarianceThreshold"
       ],
       ans: 1,
       exp: "Creating meaningful interactions from domain knowledge (revenue = count × average) is valid feature engineering. It's only leakage if it directly encodes future/target information."
@@ -973,32 +973,32 @@ export const MCQ = {
     {
       q: "SHAP values are used to:",
       opts: [
-        "Select features using variance",
         "Explain individual predictions and measure feature contribution",
         "Replace PCA for dimensionality reduction",
+        "Select features using variance",
         "Detect outliers in high dimensions"
       ],
-      ans: 1,
+      ans: 0,
       exp: "SHAP (SHapley Additive exPlanations) assigns each feature a contribution value for individual predictions, using game theory. It provides both local (per-instance) and global feature importance."
     },
     {
       q: "After applying PCA to reduce 50 features to 5 components, can you retrieve the original 50 features exactly?",
       opts: [
+        "Yes, using the inverse_transform with 95% accuracy",
         "Yes, always",
         "Only if you kept all 50 components",
-        "No",
-        "Yes, using the inverse_transform with 95% accuracy"
+        "No"
       ],
-      ans: 2,
+      ans: 3,
       exp: "PCA with fewer components than original features is lossy. inverse_transform gives an approximation, not the exact original. If you keep all 50 components, you can reconstruct perfectly."
     },
     {
       q: "L1 regularization (Lasso) in linear models also performs:",
       opts: [
-        "Dimensionality reduction like PCA",
-        "Automatic feature selection by driving some coefficients to exactly zero",
         "Clustering of features",
-        "Correlation removal"
+        "Automatic feature selection by driving some coefficients to exactly zero",
+        "Correlation removal",
+        "Dimensionality reduction like PCA"
       ],
       ans: 1,
       exp: "L1 (Lasso) penalty promotes sparsity — it drives coefficients of irrelevant features to exactly zero. This is both regularization and implicit feature selection in one step."
@@ -1006,21 +1006,21 @@ export const MCQ = {
     {
       q: "For a text dataset with 10,000 unique words (TF-IDF features), which is most appropriate before training a logistic regression?",
       opts: [
-        "VarianceThreshold to remove rare words, then StandardScaler",
         "Keep all 10,000 features as-is",
+        "All three combined",
         "PCA to reduce to ~100 components",
-        "All three combined"
+        "VarianceThreshold to remove rare words, then StandardScaler"
       ],
-      ans: 0,
+      ans: 3,
       exp: "VarianceThreshold removes near-zero variance features (very rare words); scaling helps logistic regression. However, for sparse TF-IDF specifically, truncated SVD (a.k.a. LSA) is often used instead of PCA."
     },
     {
       q: "The key difference between Filter, Wrapper, and Embedded feature selection methods:",
       opts: [
-        "Filter uses ML models; Wrapper doesn't; Embedded combines both",
-        "Filter is model-independent; Wrapper evaluates subsets with a model; Embedded uses regularization inside training",
         "All three are equivalent",
-        "Filter is faster but Wrapper is more accurate always"
+        "Filter is model-independent; Wrapper evaluates subsets with a model; Embedded uses regularization inside training",
+        "Filter is faster but Wrapper is more accurate always",
+        "Filter uses ML models; Wrapper doesn't; Embedded combines both"
       ],
       ans: 1,
       exp: "Filter methods (variance, correlation) are model-independent and fast. Wrapper methods (RFE, forward/backward selection) evaluate feature subsets by training a model. Embedded methods (Lasso, feature_importances_) select features as part of training."
@@ -1028,64 +1028,64 @@ export const MCQ = {
     {
       q: "Pearson correlation measures:",
       opts: [
+        "Mutual information between variables",
         "Any non-linear relationship between two variables",
-        "Linear relationship between two continuous variables",
         "Rank-based order relationship",
-        "Mutual information between variables"
+        "Linear relationship between two continuous variables"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Pearson r measures linear correlation between continuous variables. For non-linear relationships, Spearman rank correlation or mutual information is more appropriate."
     },
     {
       q: "A feature 'day_of_week' coded as 0–6 (Mon=0, Sun=6): coding Sunday=6 and Monday=0 implies:",
       opts: [
+        "This is nominal encoding",
         "No ordering issue",
         "False ordering: Sunday (6) appears 'greater' than Monday (0) and not close to it",
-        "Sunday and Monday are correctly shown as adjacent",
-        "This is nominal encoding"
+        "Sunday and Monday are correctly shown as adjacent"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Day of week is cyclic. Linear encoding 0–6 makes Sunday (6) and Monday (0) seem far apart, and implies Tuesday (1) > Monday (0). Use sin/cos cyclical encoding to capture the circular nature."
     },
     {
       q: "What does 'n_components=0.95' in PCA(n_components=0.95) mean?",
       opts: [
+        "Apply 95% threshold to loadings",
         "Use 95 components",
         "Automatically select the minimum components to explain 95% of variance",
-        "Use 95% of the data for fitting",
-        "Apply 95% threshold to loadings"
+        "Use 95% of the data for fitting"
       ],
-      ans: 1,
+      ans: 2,
       exp: "When n_components is a float between 0 and 1, sklearn's PCA automatically selects the minimum number of components needed to explain that fraction of total variance."
     },
     {
       q: "The main risk of using too many polynomial features (high degree):",
       opts: [
-        "Model underfits",
-        "Model overfits",
+        "Training is always faster",
         "Features become uncorrelated",
-        "Training is always faster"
+        "Model overfits",
+        "Model underfits"
       ],
-      ans: 1,
+      ans: 2,
       exp: "High-degree polynomial features increase model complexity exponentially. The model can perfectly fit training data (including noise) while generalizing poorly to new data — classic overfitting."
     },
     {
       q: "In a feature selection report, a feature has importance = 0. This means:",
       opts: [
-        "The feature was constant",
         "The model never used this feature to make a split/decision",
         "The feature is perfectly correlated with another",
+        "The feature was constant",
         "An error in computation"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Feature importance = 0 in a tree model means the feature was never chosen for any split across all trees — it provided no benefit. This could be due to redundancy, irrelevance, or masking by other features."
     },
     {
       q: "For a recommendation system with millions of users, encoding user_id as One-Hot would create:",
       opts: [
-        "A manageable sparse matrix",
-        "An impractically large matrix with millions of columns",
         "A 100-column dense matrix",
+        "An impractically large matrix with millions of columns",
+        "A manageable sparse matrix",
         "A single binary feature"
       ],
       ans: 1,
@@ -1096,31 +1096,31 @@ export const MCQ = {
     {
       q: "A Perceptron fails to learn the XOR function because:",
       opts: [
-        "Its learning rate is too small",
-        "XOR data is not linearly separable",
         "The step function is non-differentiable",
-        "It needs more training epochs"
+        "It needs more training epochs",
+        "Its learning rate is too small",
+        "XOR data is not linearly separable"
       ],
-      ans: 1,
+      ans: 3,
       exp: "XOR data cannot be separated by a single straight line (hyperplane). The Perceptron can only classify linearly separable data. Multi-layer networks (MLPs) can solve XOR."
     },
     {
       q: "The sigmoid function σ(z) outputs values in the range:",
       opts: [
-        "(−∞, +∞)",
+        "[0, 1]",
         "[−1, +1]",
-        "(0, 1)",
-        "[0, 1]"
+        "(−∞, +∞)",
+        "(0, 1)"
       ],
-      ans: 2,
+      ans: 3,
       exp: "σ(z) = 1/(1+e⁻ᶻ) asymptotically approaches 0 and 1 but never reaches them — so the range is the open interval (0, 1). This makes it suitable for probability estimation."
     },
     {
       q: "Logistic Regression is called 'regression' but is used for:",
       opts: [
-        "Predicting continuous values",
-        "Classification",
         "Dimensionality reduction",
+        "Classification",
+        "Predicting continuous values",
         "Clustering"
       ],
       ans: 1,
@@ -1129,53 +1129,53 @@ export const MCQ = {
     {
       q: "The 'naïve' assumption in Naïve Bayes is:",
       opts: [
-        "All features have the same mean",
-        "All features are conditionally independent given the class",
         "The dataset is balanced",
-        "Features are normally distributed"
+        "Features are normally distributed",
+        "All features are conditionally independent given the class",
+        "All features have the same mean"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Naïve Bayes assumes that all features are conditionally independent given the class label: P(X|y) = ∏P(xᵢ|y). This is 'naïve' because it's rarely true, yet the classifier often works well."
     },
     {
       q: "KNN is called a 'lazy learner' because:",
       opts: [
-        "It learns slowly during training",
         "It stores all training data and defers computation to prediction time",
+        "It performs poorly on complex tasks",
         "It uses fewer resources than other models",
-        "It performs poorly on complex tasks"
+        "It learns slowly during training"
       ],
-      ans: 1,
+      ans: 0,
       exp: "KNN has no training phase — it simply memorizes all training data. All computation (finding K nearest neighbors) happens at prediction time. This makes training instant but prediction slow for large datasets."
     },
     {
       q: "In Decision Trees, Gini Impurity = 0 means:",
       opts: [
-        "All classes are equally distributed",
         "The node contains only samples of one class",
+        "All classes are equally distributed",
         "50% of each class in the node",
         "Maximum entropy"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Gini = 1 − Σpᵢ² = 0 when all pᵢ = 0 except one pᵢ = 1. This means all samples in the node belong to the same class — perfect purity, no further splitting needed."
     },
     {
       q: "SVM finds the hyperplane that:",
       opts: [
-        "Minimizes training error",
-        "Maximizes the margin between the two closest points of each class",
         "Passes through the centroid of each class",
-        "Minimizes the number of support vectors"
+        "Minimizes the number of support vectors",
+        "Minimizes training error",
+        "Maximizes the margin between the two closest points of each class"
       ],
-      ans: 1,
+      ans: 3,
       exp: "SVM's objective is to find the maximum-margin hyperplane — the one with the largest minimum distance (margin) from any training point. The data points closest to the hyperplane are support vectors."
     },
     {
       q: "A medical test predicts cancer. Reducing false negatives is critical. Which metric to optimize?",
       opts: [
-        "Precision",
-        "Recall (Sensitivity)",
         "Specificity",
+        "Recall (Sensitivity)",
+        "Precision",
         "Accuracy"
       ],
       ans: 1,
@@ -1185,97 +1185,97 @@ export const MCQ = {
       q: "A spam filter should minimize false positives (legitimate emails marked spam). Optimize:",
       opts: [
         "Recall",
-        "Precision",
+        "ROC-AUC",
         "F1-Score",
-        "ROC-AUC"
+        "Precision"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Precision = TP/(TP+FP). A false positive here means a good email goes to spam — annoying and potentially harmful. High precision means when we predict spam, it's very likely actual spam."
     },
     {
       q: "The C parameter in SVM controls:",
       opts: [
-        "The kernel function type",
         "Bias-variance tradeoff: high C = harder margin",
+        "The learning rate",
         "The number of support vectors exactly",
-        "The learning rate"
+        "The kernel function type"
       ],
-      ans: 1,
+      ans: 0,
       exp: "C is the regularization parameter. Low C = soft margin (allows some misclassifications, more regularization, may underfit). High C = hard margin (penalizes all errors, less regularization, may overfit)."
     },
     {
       q: "ROC-AUC = 0.5 means the classifier is:",
       opts: [
         "Perfectly accurate",
-        "Equivalent to random guessing",
         "Worse than random",
+        "Equivalent to random guessing",
         "Perfectly calibrated"
       ],
-      ans: 1,
+      ans: 2,
       exp: "AUC = 0.5 means the ROC curve lies on the diagonal — the classifier has no discriminating power, equivalent to randomly assigning classes. AUC = 1.0 is perfect; AUC < 0.5 suggests systematic inversion."
     },
     {
       q: "MultinomialNB is most appropriate for:",
       opts: [
         "Continuous feature data",
+        "Time-series data",
         "Text classification with word count features",
-        "Binary (0/1) features",
-        "Time-series data"
+        "Binary (0/1) features"
       ],
-      ans: 1,
+      ans: 2,
       exp: "MultinomialNB assumes features are counts (or frequencies), making it ideal for NLP tasks with TF or TF-IDF features. GaussianNB is for continuous data; BernoulliNB for binary vectors."
     },
     {
       q: "The kernel trick in SVM allows:",
       opts: [
+        "Handling missing values",
         "Training without labeled data",
         "Non-linear classification by implicitly mapping data to higher-dimensional space",
-        "Handling missing values",
         "Automatic feature selection"
       ],
-      ans: 1,
+      ans: 2,
       exp: "The kernel trick computes dot products in a high-dimensional feature space without explicitly computing the transformation. RBF kernel can handle non-linear boundaries efficiently."
     },
     {
       q: "In a confusion matrix, False Positive Rate (FPR) is:",
       opts: [
-        "FP / (FP + TN)",
         "TP / (TP + FN)",
+        "FP / (FP + TN)",
         "FP / (FP + TP)",
         "TN / (TN + FP)"
       ],
-      ans: 0,
+      ans: 1,
       exp: "FPR = FP/(FP+TN) = proportion of actual negatives incorrectly classified as positive. It's plotted on the x-axis of the ROC curve. Specificity = 1 − FPR = TN/(TN+FP)."
     },
     {
       q: "The Perceptron update rule wᵢ ← wᵢ + η(y − ŷ)xᵢ updates weights when:",
       opts: [
-        "Always, every epoch",
-        "Only when prediction is incorrect",
+        "Only in the first epoch",
         "Only when y = 1",
-        "Only in the first epoch"
+        "Always, every epoch",
+        "Only when prediction is incorrect"
       ],
-      ans: 1,
+      ans: 3,
       exp: "When the prediction is correct (y = ŷ), (y − ŷ) = 0 and weights don't change. Weights only update when there's a mismatch. Perceptron is guaranteed to converge only for linearly separable data."
     },
     {
       q: "Decision Tree with unlimited depth will:",
       opts: [
+        "Underfit",
         "Always generalize well",
         "Overfit",
-        "Underfit",
         "Have high bias and low variance"
       ],
-      ans: 1,
+      ans: 2,
       exp: "An unlimited depth tree can grow until each leaf contains a single training sample (zero training error). This is severe overfitting — high variance. Pruning or max_depth limits are essential."
     },
     {
       q: "The RBF (Radial Basis Function) kernel in SVM is most useful when:",
       opts: [
-        "Classes are linearly separable",
+        "Training speed is top priority",
         "Decision boundary is non-linear and complex",
         "Data has millions of features (NLP)",
-        "Training speed is top priority"
+        "Classes are linearly separable"
       ],
       ans: 1,
       exp: "The RBF kernel maps data to infinite-dimensional space, enabling complex non-linear decision boundaries. For linearly separable data, a linear kernel is sufficient and faster."
@@ -1284,18 +1284,18 @@ export const MCQ = {
       q: "F1-Score is defined as:",
       opts: [
         "(TP + TN) / total",
+        "TP / (TP + FN)",
         "2 × / (Precision + Recall)",
-        "TP / (TP + FP)",
-        "TP / (TP + FN)"
+        "TP / (TP + FP)"
       ],
-      ans: 1,
+      ans: 2,
       exp: "F1 = harmonic mean of Precision and Recall = 2PR/(P+R). It balances both metrics and is the go-to for imbalanced datasets. Macro-F1 and weighted-F1 extend this to multiclass."
     },
     {
       q: "KNN with K=1 will have what training error?",
       opts: [
-        "50%",
         "High error due to noise",
+        "50%",
         "Zero",
         "Error depends on data distribution"
       ],
@@ -1305,100 +1305,100 @@ export const MCQ = {
     {
       q: "A Decision Tree uses Information Gain. The feature chosen at each split:",
       opts: [
-        "Has the smallest Gini impurity value",
-        "Maximizes information gain",
         "Has the highest variance",
-        "Is selected randomly"
+        "Has the smallest Gini impurity value",
+        "Is selected randomly",
+        "Maximizes information gain"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Information Gain = H(parent) − Σ(weighted H(child)). The feature that reduces entropy the most (maximizes information gain) is chosen. This is used in ID3 and C4.5 algorithms."
     },
     {
       q: "Logistic Regression uses Binary Cross-Entropy loss. For a true label y=1 and predicted probability p=0.01, the loss is:",
       opts: [
+        "Very large (−log(0.01) ≈ 4.6)",
         "Very small",
         "Moderate",
-        "Very large (−log(0.01) ≈ 4.6)",
         "Zero"
       ],
-      ans: 2,
+      ans: 0,
       exp: "Loss = −log(p) for y=1. −log(0.01) = 4.61, which is very large. The model is extremely confident in the wrong direction — the loss penalizes this severely, driving correction."
     },
     {
       q: "For a customer churn model, you get Precision=0.90 and Recall=0.30. What does this indicate?",
       opts: [
         "Excellent model overall",
-        "Model rarely predicts churn but when it does, it's usually right",
         "Model predicts all customers will churn",
-        "Good balance between precision and recall"
+        "Good balance between precision and recall",
+        "Model rarely predicts churn but when it does, it's usually right"
       ],
-      ans: 1,
+      ans: 3,
       exp: "High precision, low recall: when the model predicts churn, it's correct 90% of the time (few false positives), but it only identifies 30% of actual churners (many false negatives)."
     },
     {
       q: "Which classifier makes the independence assumption that helps it handle text very efficiently?",
       opts: [
-        "KNN",
+        "Decision Tree",
         "SVM",
-        "Naïve Bayes",
-        "Decision Tree"
+        "KNN",
+        "Naïve Bayes"
       ],
-      ans: 2,
+      ans: 3,
       exp: "Naïve Bayes assumes feature independence: P(x1,x2,...|y) = ∏P(xi|y). This makes training and prediction O(n·d) — very fast for text with thousands of word features."
     },
     {
       q: "Standardizing features is essential for KNN because:",
       opts: [
-        "KNN is a probabilistic model sensitive to distributions",
-        "KNN uses distances",
+        "KNN overfits without scaling",
         "KNN uses gradient descent that needs normalized gradients",
-        "KNN overfits without scaling"
+        "KNN uses distances",
+        "KNN is a probabilistic model sensitive to distributions"
       ],
-      ans: 1,
+      ans: 2,
       exp: "KNN classifies based on Euclidean distance. If salary (0–1,000,000) and age (0–100) are both used, salary completely dominates the distance. Scaling gives both features equal influence."
     },
     {
       q: "Decision Tree Information Gain uses Entropy, defined as:",
       opts: [
-        "1 − Σpᵢ²",
-        "−Σpᵢ·log₂(pᵢ)",
+        "log₂(n_classes)",
         "Σpᵢ·(1−pᵢ)",
-        "log₂(n_classes)"
+        "1 − Σpᵢ²",
+        "−Σpᵢ·log₂(pᵢ)"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Entropy H = −Σpᵢ·log₂(pᵢ) where pᵢ is the proportion of class i. Maximum entropy occurs at uniform distribution (H = log₂(k) for k classes). Zero entropy = pure node."
     },
     {
       q: "SVM's support vectors are:",
       opts: [
-        "All training data points",
-        "Training points farthest from the decision boundary",
+        "Points with the highest feature values",
         "Training points closest to the decision boundary that define it",
-        "Points with the highest feature values"
+        "Training points farthest from the decision boundary",
+        "All training data points"
       ],
-      ans: 2,
+      ans: 1,
       exp: "Support vectors are the training points that lie on or within the margin (closest to the hyperplane). They 'support' the boundary — removing non-support vectors doesn't change the hyperplane."
     },
     {
       q: "A model has AUC-ROC = 0.98 but F1-Score = 0.35 on a 99:1 imbalanced dataset. The model is:",
       opts: [
-        "Excellent at all prediction tasks",
         "Good at ranking but poor at binary decisions at the default 0.5 threshold",
         "Equally good on both metrics",
-        "Definitely using the wrong algorithm"
+        "Definitely using the wrong algorithm",
+        "Excellent at all prediction tasks"
       ],
-      ans: 1,
+      ans: 0,
       exp: "High AUC = good discrimination between classes at various thresholds. Low F1 = poor binary predictions at default threshold 0.5. Adjusting the threshold can dramatically improve F1."
     },
     {
       q: "The 'elbow' in K-means is analogous to what concept in Decision Trees?",
       opts: [
+        "Both B and C",
         "Gini impurity reduction",
-        "Max depth limiting overfitting",
         "Information gain",
-        "Both B and C"
+        "Max depth limiting overfitting"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Both the elbow method (K-means) and max_depth (Decision Tree) help find the right model complexity. Beyond the elbow K (or beyond appropriate max_depth), adding complexity gives diminishing returns / overfitting."
     },
     {
@@ -1406,8 +1406,8 @@ export const MCQ = {
       opts: [
         "Data is balanced",
         "The positive class is rare and finding it matters most",
-        "You need speed",
-        "Both classes are equally important"
+        "Both classes are equally important",
+        "You need speed"
       ],
       ans: 1,
       exp: "ROC-AUC can be optimistic for imbalanced data because TN is large. PR-AUC focuses on the positive (rare) class — it directly measures ability to find positives among all predictions."
@@ -1415,32 +1415,32 @@ export const MCQ = {
     {
       q: "The decision boundary of Logistic Regression is:",
       opts: [
+        "A tree-like structure",
         "A curve",
         "A linear hyperplane (w·x + b = 0)",
-        "A tree-like structure",
         "Determined by the nearest neighbors"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Despite the sigmoid output, Logistic Regression's decision boundary is linear: P = 0.5 when σ(w·x+b) = 0.5, i.e., when w·x+b = 0. This is a straight line/hyperplane in feature space."
     },
     {
       q: "A model trained on credit data achieves 95% accuracy. The dataset has 95% 'No Default' samples. The model:",
       opts: [
         "Is excellent",
-        "May just be predicting 'No Default' for everyone",
+        "Is overfitting",
         "Needs more data",
-        "Is overfitting"
+        "May just be predicting 'No Default' for everyone"
       ],
-      ans: 1,
+      ans: 3,
       exp: "95% accuracy equals the majority class rate — the model may be a trivial classifier. For imbalanced credit data, check precision/recall/F1 for the minority 'Default' class."
     },
     {
       q: "GaussianNB assumes features follow:",
       opts: [
-        "Uniform distribution",
+        "No distribution (non-parametric)",
         "Normal (Gaussian) distribution within each class",
         "Multinomial distribution",
-        "No distribution (non-parametric)"
+        "Uniform distribution"
       ],
       ans: 1,
       exp: "GaussianNB models P(xᵢ|y) as a Gaussian distribution, estimating the mean and variance of each feature for each class. It works when features are (approximately) normally distributed."
@@ -1448,65 +1448,65 @@ export const MCQ = {
     {
       q: "When K is too small in KNN (e.g., K=1), the model:",
       opts: [
-        "Underfits and has high bias",
-        "Overfits",
         "Has high variance and low bias (overfits)",
-        "Both A and C"
+        "Overfits",
+        "Both A and C",
+        "Underfits and has high bias"
       ],
-      ans: 2,
+      ans: 0,
       exp: "Small K = low bias but high variance (overfits, sensitive to individual noisy points). Large K = high bias but low variance (smoother, potentially underfitting). Optimal K is found via CV."
     },
     {
       q: "Binary Cross-Entropy penalizes a model most when:",
       opts: [
         "It predicts 0.5 for all samples",
+        "It predicts randomly (0.5)",
         "It predicts with high confidence in the WRONG direction",
-        "It predicts the correct class with 0.7 probability",
-        "It predicts randomly (0.5)"
+        "It predicts the correct class with 0.7 probability"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Loss = −y·log(p) − (1−y)·log(1−p). When y=1 and p→0, loss → ∞. High-confidence wrong predictions incur the highest penalty, driving aggressive correction during training."
     },
     {
       q: "In multiclass classification, One-vs-Rest (OvR) strategy trains:",
       opts: [
         "One model for all classes",
+        "n²/2 pairwise models",
         "n_classes models, each treating one class as positive and rest as negative",
-        "One model using softmax",
-        "n²/2 pairwise models"
+        "One model using softmax"
       ],
-      ans: 1,
+      ans: 2,
       exp: "OvR trains n_classes binary classifiers. Each sees 'my class vs. all others.' Final prediction uses the classifier with the highest confidence score. Logistic Regression uses OvR by default."
     },
     {
       q: "A hospital wants to detect rare diseases. Which is more dangerous: FP or FN?",
       opts: [
-        "False Positive",
-        "False Negative",
         "Both equally dangerous",
-        "Depends on cost of treatment"
+        "Depends on cost of treatment",
+        "False Negative",
+        "False Positive"
       ],
-      ans: 1,
+      ans: 2,
       exp: "False Negative (missed diagnosis) is typically more dangerous — the patient doesn't receive needed treatment. Optimize for high Recall/Sensitivity. FP leads to unnecessary further testing, but at least the patient gets checked."
     },
     {
       q: "Laplace smoothing in Naïve Bayes prevents:",
       opts: [
         "Overfitting to dominant classes",
-        "Zero probability for unseen feature values = 0)",
         "Multicollinearity between features",
+        "Zero probability for unseen feature values = 0)",
         "High variance in probability estimates"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Without smoothing, if a feature value (e.g., word) never appeared in training for a class, P(word|class)=0, making the whole product P(X|y)=0. Laplace (add-1) smoothing avoids this zero probability issue."
     },
     {
       q: "SVM with a linear kernel is preferred for:",
       opts: [
-        "Image classification with complex spatial features",
-        "High-dimensional, linearly separable data like text (NLP)",
         "Non-linear decision boundaries",
-        "Very small datasets only"
+        "High-dimensional, linearly separable data like text (NLP)",
+        "Very small datasets only",
+        "Image classification with complex spatial features"
       ],
       ans: 1,
       exp: "Linear SVM is highly effective for high-dimensional sparse data (like TF-IDF text features) where linear separability is often sufficient. It's computationally efficient when n_features >> n_samples."
@@ -1514,21 +1514,21 @@ export const MCQ = {
     {
       q: "What is the purpose of the 'C' parameter in Soft-Margin SVM?",
       opts: [
-        "Controls the number of support vectors",
-        "Trades off maximizing margin width vs penalizing margin violations (misclassifications)",
+        "Specifies the number of classes",
         "Sets the kernel bandwidth",
-        "Specifies the number of classes"
+        "Trades off maximizing margin width vs penalizing margin violations (misclassifications)",
+        "Controls the number of support vectors"
       ],
-      ans: 1,
+      ans: 2,
       exp: "In Soft-Margin SVM, C controls the regularization: low C = wide margin, allows violations (underfits with very noisy data); high C = narrow margin, fewer violations (can overfit). It balances simplicity vs correctness."
     },
     {
       q: "Which algorithm is non-parametric and makes no assumptions about the data distribution?",
       opts: [
-        "Logistic Regression",
         "Gaussian Naïve Bayes",
+        "Linear SVM",
         "K-Nearest Neighbors",
-        "Linear SVM"
+        "Logistic Regression"
       ],
       ans: 2,
       exp: "KNN is non-parametric — it makes no assumption about the underlying data distribution. It simply uses distances between points. LogReg and GNB make explicit distributional assumptions."
@@ -1536,34 +1536,34 @@ export const MCQ = {
     {
       q: "The macro-averaged F1-score in multiclass classification:",
       opts: [
+        "Uses only the majority class F1",
         "Weights each class by its sample size",
         "Computes F1 per class then takes an unweighted average",
-        "Uses only the majority class F1",
         "Is equivalent to accuracy"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Macro F1 = average of per-class F1 scores, treating all classes equally regardless of support. Weighted F1 accounts for class imbalance by weighting by sample count. Macro is stricter for rare classes."
     },
     {
       q: "A Decision Tree's max_depth=3 means:",
       opts: [
-        "The tree has 3 leaf nodes",
         "The tree has at most 3 levels of splits from the root",
+        "3 classes are predicted",
         "3 features are used",
-        "3 classes are predicted"
+        "The tree has 3 leaf nodes"
       ],
-      ans: 1,
+      ans: 0,
       exp: "max_depth=3 limits the tree to 3 levels of splitting: root → 3 levels deep. With depth 3, the tree can have at most 2³=8 leaf nodes. This prevents overfitting."
     },
     {
       q: "Precision = 0.60 in a disease classifier means:",
       opts: [
+        "40% of predictions are wrong",
         "60% of actual disease patients are detected",
-        "Of patients predicted to have disease, 60% actually do",
         "The model is correct 60% of the time",
-        "40% of predictions are wrong"
+        "Of patients predicted to have disease, 60% actually do"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Precision = TP/(TP+FP). Of all patients the model says 'has disease,' 60% truly do (40% are false alarms). This controls the false alarm rate. Recall measures how many actual cases are found."
     },
     {
@@ -1580,56 +1580,56 @@ export const MCQ = {
     {
       q: "Which classifier is most interpretable for explaining decisions to non-technical stakeholders?",
       opts: [
+        "Decision Tree",
         "SVM with RBF kernel",
         "Random Forest",
-        "Decision Tree",
         "Logistic Regression with many features"
       ],
-      ans: 2,
+      ans: 0,
       exp: "A Decision Tree can be visualized and read like a flowchart: 'If income > 50k AND age > 30, then predict Yes.' This is the most transparent and explainable model for non-technical audiences."
     },
     {
       q: "In Logistic Regression, the coefficient for a binary feature tells you:",
       opts: [
+        "The probability that this feature is useful",
         "The feature's correlation with the target",
         "The change in log-odds of the positive class per unit increase in the feature",
-        "The probability that this feature is useful",
         "The number of standard deviations from the mean"
       ],
-      ans: 1,
+      ans: 2,
       exp: "LR coefficients are in log-odds space: a coefficient β means the log-odds of y=1 changes by β for each unit increase in that feature (holding others constant). exp(β) gives the odds ratio."
     },
     {
       q: "SVM using the Polynomial kernel k(x,z) = (x·z + 1)² maps data to:",
       opts: [
-        "Same dimensional space",
         "Quadratic feature space",
-        "Infinite-dimensional space",
-        "Lower dimensional space"
+        "Same dimensional space",
+        "Lower dimensional space",
+        "Infinite-dimensional space"
       ],
-      ans: 1,
+      ans: 0,
       exp: "The degree-2 polynomial kernel corresponds to a feature map including all original features, their squares, and all pairwise products — quadratic feature space. Computationally done via kernel matrix, not explicit mapping."
     },
     {
       q: "The confusion matrix for a binary classifier has TP=45, TN=50, FP=5, FN=10. Accuracy is:",
       opts: [
         "82.3%",
+        "87.5%",
         "90%",
-        "85.7%",
-        "87.5%"
+        "85.7%"
       ],
-      ans: 2,
+      ans: 3,
       exp: "Accuracy = (TP+TN)/(TP+TN+FP+FN) = (45+50)/(45+50+5+10) = 95/110 ≈ 0.8636 ≈ 86.4%. Closest to 85.7%. Actually: 95/110 = 86.4%, so 85.7% is closest to correct (rounding differences may vary)."
     },
     {
       q: "For a multiclass problem with 5 classes using One-vs-Rest SVM, how many models are trained?",
       opts: [
-        "5",
+        "25",
         "10 (5×4/2 pairs)",
         "1",
-        "25"
+        "5"
       ],
-      ans: 0,
+      ans: 3,
       exp: "One-vs-Rest (OvR) trains one binary classifier per class: class 1 vs rest, class 2 vs rest, ..., class 5 vs rest = 5 models total. One-vs-One (OvO) would train C(5,2)=10 models."
     }
   ],
@@ -1637,10 +1637,10 @@ export const MCQ = {
     {
       q: "Simple Linear Regression finds the best fit line by minimizing:",
       opts: [
-        "Sum of absolute errors",
+        "R-squared directly",
         "Sum of squared errors (OLS",
-        "Maximum error",
-        "R-squared directly"
+        "Sum of absolute errors",
+        "Maximum error"
       ],
       ans: 1,
       exp: "OLS minimizes Σ(yᵢ − ŷᵢ)². Squaring amplifies large errors, making the solution sensitive to outliers but analytically tractable (closed-form solution exists: β = (XᵀX)⁻¹Xᵀy)."
@@ -1648,21 +1648,21 @@ export const MCQ = {
     {
       q: "R-squared (R²) = 0.85 means:",
       opts: [
-        "85% accuracy",
         "The model explains 85% of the variance in the target",
+        "RMSE is 0.85",
         "15% of predictions are wrong",
-        "RMSE is 0.85"
+        "85% accuracy"
       ],
-      ans: 1,
+      ans: 0,
       exp: "R² = 1 − SS_res/SS_tot. R²=0.85 means the model accounts for 85% of the variance in y. The remaining 15% is unexplained variance (noise or missing features)."
     },
     {
       q: "Lasso (L1) regression drives some coefficients to exactly zero because:",
       opts: [
-        "L2 norm constraint has corners where sparse solutions occur",
-        "L1 norm constraint has corners at axes where coefficients become exactly zero",
         "Gradient descent randomly sets coefficients to zero",
-        "Lasso uses a different optimizer"
+        "L1 norm constraint has corners at axes where coefficients become exactly zero",
+        "Lasso uses a different optimizer",
+        "L2 norm constraint has corners where sparse solutions occur"
       ],
       ans: 1,
       exp: "The L1 ball (|β₁| + |β₂| = const) has corners on the coordinate axes. OLS contours often 'touch' these corners, setting one or more coefficients to exactly zero — automatic feature selection."
@@ -1671,9 +1671,9 @@ export const MCQ = {
       q: "Ridge (L2) regression shrinks coefficients but rarely makes them exactly zero because:",
       opts: [
         "L2 ball is circular/spherical",
-        "Ridge uses a larger penalty than Lasso",
+        "Ridge can't handle correlated features",
         "Ridge has a lower learning rate",
-        "Ridge can't handle correlated features"
+        "Ridge uses a larger penalty than Lasso"
       ],
       ans: 0,
       exp: "The L2 ball (β₁² + β₂² = const) is smooth and round — no corners at axes. OLS contours touch the L2 ball at a non-axis point, so no coefficient becomes exactly zero."
@@ -1682,42 +1682,42 @@ export const MCQ = {
       q: "ElasticNet is a combination of:",
       opts: [
         "Ridge and PCA",
-        "Lasso and Ridge (L1 + L2 penalty)",
         "Lasso and Decision Tree",
+        "Lasso and Ridge (L1 + L2 penalty)",
         "Ridge and Gradient Boosting"
       ],
-      ans: 1,
+      ans: 2,
       exp: "ElasticNet = α·L1 + (1−α)·L2 penalty. The l1_ratio parameter controls the mix. It gets feature selection from L1 and handles correlated features better than pure L1."
     },
     {
       q: "A house price model shows multicollinearity between 'total_rooms' and 'total_bedrooms'. The best fix is:",
       opts: [
         "Remove both features",
-        "Use Lasso or Ridge regression",
         "Increase sample size",
-        "Switch to a decision tree"
+        "Switch to a decision tree",
+        "Use Lasso or Ridge regression"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Ridge regression stabilizes estimates when features are multicollinear — it adds λI to (XᵀX) before inversion, preventing singular/near-singular matrices. Lasso may drop one correlated feature entirely."
     },
     {
       q: "MSE vs MAE: which is more sensitive to outliers?",
       opts: [
-        "MAE",
         "MSE",
-        "Both equally sensitive",
-        "Depends on dataset size"
+        "MAE",
+        "Depends on dataset size",
+        "Both equally sensitive"
       ],
-      ans: 1,
+      ans: 0,
       exp: "MSE = mean of squared errors — large errors contribute disproportionately (squared). MAE = mean of absolute errors — all errors contribute linearly. MSE penalizes outliers much more heavily."
     },
     {
       q: "In multiple linear regression, the coefficient β₁ represents:",
       opts: [
-        "The correlation between x₁ and y",
-        "The change in y per unit increase in x₁, holding all other predictors constant",
         "The total effect of x₁ on y",
-        "The R² contribution of x₁"
+        "The change in y per unit increase in x₁, holding all other predictors constant",
+        "The R² contribution of x₁",
+        "The correlation between x₁ and y"
       ],
       ans: 1,
       exp: "In MLR, β₁ is the partial regression coefficient: the expected change in y for a one-unit increase in x₁, while all other predictors are held fixed. This isolates x₁'s independent effect."
@@ -1725,98 +1725,98 @@ export const MCQ = {
     {
       q: "Polynomial Regression degree=5 achieves R²=0.99 on training data but R²=0.20 on test data. This indicates:",
       opts: [
-        "Underfitting",
+        "The test set is too small",
         "Data leakage",
-        "Severe overfitting",
-        "The test set is too small"
+        "Underfitting",
+        "Severe overfitting"
       ],
-      ans: 2,
+      ans: 3,
       exp: "Huge gap between train (0.99) and test (0.20) R² = overfitting. A degree-5 polynomial has enough parameters to weave through training points, but this doesn't generalize. Use lower degree or regularization."
     },
     {
       q: "For time-series data (sales over months), the correct train-test split is:",
       opts: [
-        "Random 80/20 split",
         "Split by time: first 80% of time periods for training, last 20% for testing",
         "K-fold cross-validation",
+        "Random 80/20 split",
         "Leave-one-out cross-validation"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Time-series data must respect temporal ordering. Random splits allow 'future' data into training (leakage). Always train on the past, test on future time periods."
     },
     {
       q: "A lag feature y(t−1) in time-series regression means:",
       opts: [
-        "Average of the last 7 values",
-        "Yesterday's target value used as today's predictor",
+        "A rolling standard deviation",
         "The seasonal component",
-        "A rolling standard deviation"
+        "Average of the last 7 values",
+        "Yesterday's target value used as today's predictor"
       ],
-      ans: 1,
+      ans: 3,
       exp: "y(t−1) is a lag-1 feature — the previous time step's actual value used as input to predict the current value. Lag features capture autocorrelation (today's value depends on yesterday's)."
     },
     {
       q: "RMSE (Root Mean Squared Error) is preferred over MSE for reporting because:",
       opts: [
-        "RMSE is always smaller",
         "RMSE is in the same units as the target variable",
-        "RMSE handles outliers better",
-        "RMSE is faster to compute"
+        "RMSE is always smaller",
+        "RMSE is faster to compute",
+        "RMSE handles outliers better"
       ],
-      ans: 1,
+      ans: 0,
       exp: "RMSE = √MSE. Taking the square root returns the error to the same units as y (e.g., ₹ for house prices). MSE is in squared units (₹²) which is hard to interpret practically."
     },
     {
       q: "A regression model has high bias and low variance. This suggests:",
       opts: [
         "Overfitting",
+        "Data has too many outliers",
         "Underfitting",
-        "Ideal model",
-        "Data has too many outliers"
+        "Ideal model"
       ],
-      ans: 1,
+      ans: 2,
       exp: "High bias = model underfits — makes systematic errors because it's too simple (e.g., fitting a line to quadratic data). Low variance = consistent but consistently wrong. Need a more complex model."
     },
     {
       q: "Cross-validation is used in regression to:",
       opts: [
         "Speed up training",
+        "Perform bootstrapping",
         "Estimate generalization performance more reliably than a single train/test split",
-        "Select the best features automatically",
-        "Perform bootstrapping"
+        "Select the best features automatically"
       ],
-      ans: 1,
+      ans: 2,
       exp: "K-fold CV splits data into K folds, trains K models (each holding a different fold for validation), and averages scores. This gives a more robust estimate of generalization than a single split."
     },
     {
       q: "Regularization parameter λ (alpha in sklearn) in Ridge regression:",
       opts: [
         "Large λ → small shrinkage → more overfitting",
-        "Large λ → strong shrinkage → simpler model, may underfit",
         "Does not affect the model",
-        "Controls the number of features selected"
+        "Controls the number of features selected",
+        "Large λ → strong shrinkage → simpler model, may underfit"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Large λ adds a strong penalty on coefficient magnitude → coefficients shrink toward zero → simpler model. Too large = underfit. Too small = essentially no regularization → may overfit."
     },
     {
       q: "An e-commerce company wants to predict revenue (continuous). Which loss function is standard?",
       opts: [
-        "Binary Cross-Entropy",
         "Categorical Cross-Entropy",
-        "Mean Squared Error (MSE)",
-        "Hinge Loss"
+        "Binary Cross-Entropy",
+        "Hinge Loss",
+        "Mean Squared Error (MSE)"
       ],
-      ans: 2,
+      ans: 3,
       exp: "Revenue is a continuous target — regression task. MSE is the standard loss. Binary and Categorical Cross-Entropy are for classification. Hinge loss is for SVM classification."
     },
     {
       q: "The OLS closed-form solution β = (XᵀX)⁻¹Xᵀy fails when:",
       opts: [
-        "The dataset is too small",
-        "XᵀX is singular (features are perfectly multicollinear or n_samples < n_features)",
         "The target has outliers",
-        "Features are not normalized"
+        "XᵀX is singular (features are perfectly multicollinear or n_samples < n_features)",
+        "Features are not normalized",
+        "The dataset is too small"
       ],
       ans: 1,
       exp: "If features are perfectly correlated or there are more features than samples, XᵀX is singular (non-invertible). Ridge adds λI to regularize: (XᵀX + λI)⁻¹ is always invertible for λ > 0."
@@ -1824,45 +1824,45 @@ export const MCQ = {
     {
       q: "Adjusted R² penalizes adding unnecessary features because:",
       opts: [
+        "It uses a different error formula",
         "It divides R² by the number of features",
         "It adjusts for the number of predictors",
-        "It uses a different error formula",
         "It squares the residuals differently"
       ],
-      ans: 1,
+      ans: 2,
       exp: "R² always increases (or stays same) when you add features — even noise. Adjusted R² penalizes for each additional predictor, only increasing when the feature explains enough variance to justify its addition."
     },
     {
       q: "Rolling mean with window=7 in time-series:",
       opts: [
+        "Shifts the series 7 days forward",
         "Sums the last 7 values",
-        "Computes the average of the last 7 time steps",
         "Computes 7-day variance",
-        "Shifts the series 7 days forward"
+        "Computes the average of the last 7 time steps"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Rolling (or moving) mean smooths the time-series by averaging across a sliding window. Window=7 (e.g., weekly) reduces noise and captures the local trend, useful as a feature for regression models."
     },
     {
       q: "In Polynomial Regression, adding x², x³ features makes it:",
       opts: [
         "A non-linear algorithm",
+        "An ensemble method",
         "Still a linear model in its parameters (coefficients), but non-linear in x",
-        "A tree-based model",
-        "An ensemble method"
+        "A tree-based model"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Polynomial regression is linear in parameters (β₀ + β₁x + β₂x² + β₃x³). The model is still OLS regression, but the feature space has been expanded. 'Linear' refers to the parameter relationship, not x."
     },
     {
       q: "Decision Tree Regressor prediction for a new sample is:",
       opts: [
-        "The average of all training targets",
         "The mean of training samples in the leaf node where the sample falls",
-        "A linear combination of features",
-        "The median of all samples"
+        "The median of all samples",
+        "The average of all training targets",
+        "A linear combination of features"
       ],
-      ans: 1,
+      ans: 0,
       exp: "In Decision Tree regression, each leaf stores the mean of training targets in that region. Prediction = navigate the tree to the leaf, return the leaf's mean target value."
     },
     {
@@ -1870,8 +1870,8 @@ export const MCQ = {
       opts: [
         "Using fewer features",
         "Averaging predictions of many trees",
-        "Using deeper trees",
-        "Applying L2 regularization to each tree"
+        "Applying L2 regularization to each tree",
+        "Using deeper trees"
       ],
       ans: 1,
       exp: "Each tree is trained on a bootstrap sample with random feature subsets (bagging). Individual trees may overfit but differently. Averaging cancels out individual errors — variance is reduced √n times."
@@ -1879,10 +1879,10 @@ export const MCQ = {
     {
       q: "Gradient Boosting Regression improves predictions by:",
       opts: [
-        "Training all trees in parallel on the same data",
+        "Random feature sampling with replacement",
         "Each tree fitting the residual errors of the previous model",
-        "Selecting the best single tree from many candidates",
-        "Random feature sampling with replacement"
+        "Training all trees in parallel on the same data",
+        "Selecting the best single tree from many candidates"
       ],
       ans: 1,
       exp: "Gradient Boosting is sequential: Tree 1 fits y; Tree 2 fits residuals of Tree 1; Tree 3 fits residuals of Tree 1+2, etc. Each tree corrects the previous model's errors. This reduces bias."
@@ -1890,10 +1890,10 @@ export const MCQ = {
     {
       q: "For a house price dataset, you add 'zipcode' as a numeric feature (10001–99999). Without encoding, a linear model will:",
       opts: [
-        "Use it correctly as a location indicator",
+        "Apply ordinal encoding automatically",
         "Interpret zipcode numbers as having a linear relationship with price — incorrect",
         "Ignore it automatically",
-        "Apply ordinal encoding automatically"
+        "Use it correctly as a location indicator"
       ],
       ans: 1,
       exp: "Zip codes are nominal — 10001 is not 'less valuable' than 99999. Using raw numbers implies a linear numeric relationship. They should be One-Hot or Target encoded."
@@ -1901,9 +1901,9 @@ export const MCQ = {
     {
       q: "Mean Absolute Percentage Error (MAPE) is most problematic when:",
       opts: [
-        "Target values are large",
-        "Target values are near or equal to zero",
         "Dataset has many features",
+        "Target values are near or equal to zero",
+        "Target values are large",
         "Model is linear"
       ],
       ans: 1,
@@ -1913,41 +1913,41 @@ export const MCQ = {
       q: "The bias-variance tradeoff in polynomial regression: as degree increases,",
       opts: [
         "Both bias and variance decrease",
-        "Bias decreases and variance increases",
         "Bias increases and variance decreases",
-        "Both increase"
+        "Both increase",
+        "Bias decreases and variance increases"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Higher polynomial degree → more flexible model → lower bias (fits training data better), but higher variance (sensitive to training data noise). The optimal degree minimizes total error = Bias² + Variance + irreducible noise."
     },
     {
       q: "Feature 'days_since_last_purchase' used to predict 'will_churn' in a customer model: if calculated using data AFTER the prediction date, this is:",
       opts: [
         "A valid lag feature",
-        "Temporal leakage",
         "Target leakage",
-        "An interaction feature"
+        "An interaction feature",
+        "Temporal leakage"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Using data from after the prediction date (future information) in a time-ordered prediction problem constitutes temporal leakage. Features must only use information available at prediction time."
     },
     {
       q: "Gradient Boosting with too many estimators (n_estimators=10000, no early stopping) will:",
       opts: [
-        "Always improve performance",
-        "Eventually overfit",
         "Converge to a fixed value without overfitting",
-        "Fail to train due to memory"
+        "Fail to train due to memory",
+        "Always improve performance",
+        "Eventually overfit"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Gradient Boosting can overfit with too many trees. Training error keeps decreasing, but test error starts rising after the optimal point. Use early_stopping_rounds or cross-validation to find optimal n_estimators."
     },
     {
       q: "When should you use Tree-Based Regression over Linear Regression?",
       opts: [
-        "When the relationship between features and target is perfectly linear",
-        "When data has complex non-linear relationships and feature interactions",
         "When n_features > n_samples",
+        "When data has complex non-linear relationships and feature interactions",
+        "When the relationship between features and target is perfectly linear",
         "When you need coefficient interpretability"
       ],
       ans: 1,
@@ -1956,63 +1956,63 @@ export const MCQ = {
     {
       q: "Residual analysis in linear regression: if residuals show a funnel shape (variance increases with fitted values), this violates:",
       opts: [
-        "Normality of errors",
         "Homoscedasticity",
+        "Normality of errors",
         "Independence of observations",
         "Linearity of relationship"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Homoscedasticity = constant error variance. A funnel shape means heteroscedasticity — variance of errors increases with fitted values. Fix: log-transform the target, use Weighted Least Squares, or robust regression."
     },
     {
       q: "In XGBoost regression, the 'learning_rate' (eta) parameter:",
       opts: [
-        "Controls the number of trees",
-        "Scales each tree's contribution",
+        "Determines the fraction of features used per tree",
         "Sets the maximum tree depth",
-        "Determines the fraction of features used per tree"
+        "Controls the number of trees",
+        "Scales each tree's contribution"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Learning rate (eta) shrinks each tree's contribution. Smaller eta = each tree corrects less aggressively → needs more trees → slower but often better generalization. Typical range: 0.01–0.3."
     },
     {
       q: "The Durbin-Watson statistic in time-series regression tests for:",
       opts: [
+        "Normality of residuals",
         "Multicollinearity between predictors",
         "Autocorrelation in regression residuals",
-        "Normality of residuals",
         "Heteroscedasticity"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Durbin-Watson statistic tests for autocorrelation in residuals. Values near 2 = no autocorrelation. Near 0 = positive autocorrelation. Near 4 = negative autocorrelation. Autocorrelation violates OLS assumptions in time-series."
     },
     {
       q: "A stock price prediction model trained on 2015–2022 data, tested on 2023 data. The test R² = −0.30. This means:",
       opts: [
-        "The model explains 70% of variance correctly",
-        "The model performs worse than just predicting the mean",
         "Data needs to be shuffled",
-        "Test set was too small"
+        "Test set was too small",
+        "The model explains 70% of variance correctly",
+        "The model performs worse than just predicting the mean"
       ],
-      ans: 1,
+      ans: 3,
       exp: "R² can be negative when SS_res > SS_tot — the model is worse than just predicting the mean. This often happens when train distribution (pre-COVID) doesn't match test distribution (post-COVID)."
     },
     {
       q: "In regularized regression, the hyperparameter α (alpha) is tuned using:",
       opts: [
+        "R-squared on the full dataset",
         "Gradient descent",
-        "Cross-validation on the training set",
         "The test set directly",
-        "R-squared on the full dataset"
+        "Cross-validation on the training set"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Regularization strength α is a hyperparameter selected via cross-validation on the training set. Using the test set for hyperparameter selection would leak test information."
     },
     {
       q: "Which regression metric is most interpretable for house price prediction in lakhs?",
       opts: [
-        "MSE",
         "R²",
+        "MSE",
         "RMSE",
         "Adjusted R²"
       ],
@@ -2022,21 +2022,21 @@ export const MCQ = {
     {
       q: "For predicting tomorrow's demand given seasonality and trend, what feature engineering approach helps most?",
       opts: [
-        "One-Hot Encoding the date",
-        "Creating lag features, rolling statistics, and seasonal indicators (day_of_week, month_sin/cos)",
+        "Using raw timestamps as numeric features",
         "Applying PCA to past demand",
-        "Using raw timestamps as numeric features"
+        "Creating lag features, rolling statistics, and seasonal indicators (day_of_week, month_sin/cos)",
+        "One-Hot Encoding the date"
       ],
-      ans: 1,
+      ans: 2,
       exp: "For time-series demand prediction: lag features capture autocorrelation; rolling statistics capture trends; cyclical encodings (sin/cos of month/day) capture seasonality without false ordering."
     },
     {
       q: "What is 'gradient' in Gradient Boosting Regression?",
       opts: [
-        "The slope of each tree's decision boundary",
+        "The number of leaves per tree",
         "The negative gradient of the loss function with respect to predictions",
-        "The learning rate value",
-        "The number of leaves per tree"
+        "The slope of each tree's decision boundary",
+        "The learning rate value"
       ],
       ans: 1,
       exp: "In GBM, the gradient of the loss (for MSE loss, this is simply the residual = y − ŷ) is computed, and each new tree is fit to minimize this gradient signal — hence 'gradient boosting.'"
@@ -2044,142 +2044,142 @@ export const MCQ = {
     {
       q: "In multiple regression, Variance Inflation Factor (VIF) > 10 indicates:",
       opts: [
-        "Good model fit",
-        "Severe multicollinearity",
+        "The feature should be log-transformed",
         "High predictive power",
-        "The feature should be log-transformed"
+        "Good model fit",
+        "Severe multicollinearity"
       ],
-      ans: 1,
+      ans: 3,
       exp: "VIF = 1/(1 − R²ⱼ) where R²ⱼ is R² from regressing feature j on all others. VIF > 5–10 = severe multicollinearity. The feature's coefficient is unreliable. Fix: remove one correlated feature or use Ridge."
     },
     {
       q: "A real estate company wants to predict house prices. The relationship between area and price follows a square-root curve. Best approach:",
       opts: [
-        "Fit simple linear regression directly",
         "Add √area as a feature or use tree-based regression that handles non-linearity",
+        "Use classification instead",
         "Apply MinMax Scaler and re-run linear regression",
-        "Use classification instead"
+        "Fit simple linear regression directly"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Transform area to √area (domain knowledge) to linearize the relationship, then use linear regression. Alternatively, Random Forest/XGBoost automatically detect the non-linear pattern without manual transformation."
     },
     {
       q: "The intercept (β₀) in linear regression y = β₀ + β₁x represents:",
       opts: [
-        "The rate of change of y with x",
         "The predicted value of y when all predictors are zero",
         "The correlation between x and y",
-        "The standard error of prediction"
+        "The standard error of prediction",
+        "The rate of change of y with x"
       ],
-      ans: 1,
+      ans: 0,
       exp: "β₀ is the y-intercept — the model's prediction when all features are zero. In practice, this may not be meaningful (e.g., predicting house price when area=0), but it ensures the model can be unbiased at origin."
     },
     {
       q: "Huber Loss combines benefits of MSE and MAE by:",
       opts: [
-        "Using MSE for small errors and MAE for large errors (outliers)",
         "Always using MSE",
+        "Weighting samples inversely proportional to error size",
         "Squaring all errors then taking the root",
-        "Weighting samples inversely proportional to error size"
+        "Using MSE for small errors and MAE for large errors (outliers)"
       ],
-      ans: 0,
+      ans: 3,
       exp: "Huber Loss = MSE for |error| ≤ δ (sensitive to small deviations) and linear (MAE-like) for |error| > δ (robust to large errors/outliers). Parameter δ controls the transition point."
     },
     {
       q: "For a dataset with 1000 samples and 5 features, which regression approach is most likely to underfit?",
       opts: [
-        "Polynomial degree 8",
-        "Simple linear regression on a non-linear relationship",
+        "XGBoost with default parameters",
         "Random Forest with 100 trees",
-        "XGBoost with default parameters"
+        "Simple linear regression on a non-linear relationship",
+        "Polynomial degree 8"
       ],
-      ans: 1,
+      ans: 2,
       exp: "If the true relationship is non-linear, simple linear regression underfits (high bias). It can only fit a straight plane, missing curves and interactions. Polynomial or tree-based models capture the complexity."
     },
     {
       q: "In time-series, what is 'seasonality'?",
       opts: [
+        "Autocorrelation with lag 1",
         "Long-term upward or downward trend",
-        "Recurring patterns at fixed intervals",
         "Random fluctuations in the data",
-        "Autocorrelation with lag 1"
+        "Recurring patterns at fixed intervals"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Seasonality = repeating patterns tied to calendar cycles (daily, weekly, yearly). E.g., ice cream sales peak every summer. Seasonal features (month_sin, day_of_week) or seasonal decomposition capture this."
     },
     {
       q: "The p-value of a coefficient in OLS regression being > 0.05 suggests:",
       opts: [
-        "The feature is the most important",
-        "The feature's effect is NOT statistically significant",
         "The model is overfitting",
-        "The coefficient is zero exactly"
+        "The coefficient is zero exactly",
+        "The feature is the most important",
+        "The feature's effect is NOT statistically significant"
       ],
-      ans: 1,
+      ans: 3,
       exp: "p-value tests H₀: βᵢ = 0. p > 0.05 → fail to reject null hypothesis → no evidence that this feature has a real effect. The coefficient could be due to sampling noise."
     },
     {
       q: "If Lasso regression sets 3 out of 10 feature coefficients to zero, what has effectively happened?",
       opts: [
-        "Dimensionality reduction via projection",
-        "Feature selection",
+        "Data augmentation",
         "Overfitting prevention via normalization",
-        "Data augmentation"
+        "Dimensionality reduction via projection",
+        "Feature selection"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Lasso's L1 penalty forces sparse solutions — coefficients at zero mean those features contribute nothing to predictions. This is simultaneous regularization and automatic feature selection."
     },
     {
       q: "A temperature forecasting model trained on Indian cities should NOT be tested on:",
       opts: [
-        "Data from 6 months after training cutoff",
         "Shuffled data from the same period",
+        "Recent unseen data",
         "Data from a holdout set after the training period",
-        "Recent unseen data"
+        "Data from 6 months after training cutoff"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Randomly shuffled test data from the training period violates temporal ordering — future values contaminate training. Test set must be chronologically after the training period for valid evaluation."
     },
     {
       q: "MAE is more appropriate than RMSE when:",
       opts: [
-        "Outliers should be penalized heavily",
         "All errors should contribute equally",
         "The target variable is binary",
-        "You want fast computation"
+        "You want fast computation",
+        "Outliers should be penalized heavily"
       ],
-      ans: 1,
+      ans: 0,
       exp: "MAE treats all errors equally (linear penalty). RMSE squares errors, making outliers dominate. Use MAE when outliers are valid observations that shouldn't be over-penalized (e.g., rare but real extreme house prices)."
     },
     {
       q: "GradientBoostingRegressor with learning_rate=0.1 and n_estimators=100 vs learning_rate=0.01 and n_estimators=100: which generally performs better?",
       opts: [
         "Higher learning rate always wins",
-        "Lower learning rate with same n_estimators may underfit",
         "Both are identical",
+        "Lower learning rate with same n_estimators may underfit",
         "Lower learning rate is always better regardless of n_estimators"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Lower learning rate requires more trees to converge. With same n_estimators, lr=0.01 may not converge fully. lr=0.1 with 100 trees may give better results. Optimal: low lr + high n_estimators + early stopping."
     },
     {
       q: "What does 'Homoscedasticity' mean in the context of linear regression assumptions?",
       opts: [
+        "The model has no intercept",
         "Features are normally distributed",
         "Errors have constant variance across all levels of fitted values",
-        "Features are uncorrelated with each other",
-        "The model has no intercept"
+        "Features are uncorrelated with each other"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Homoscedasticity = equal spread of residuals across all fitted values. If residuals show patterns (fan shape, cone shape), OLS standard errors are unreliable. Violating this doesn't invalidate point estimates but invalidates p-values."
     },
     {
       q: "In a simple regression y = 2.5x + 10.3 with R² = 0.75, if x increases by 2 units, y changes by:",
       opts: [
-        "2.5",
+        "0.75",
         "5.0 (2 × 2.5)",
         "10.3",
-        "0.75"
+        "2.5"
       ],
       ans: 1,
       exp: "The slope coefficient β₁ = 2.5 means y increases by 2.5 for each 1-unit increase in x. For 2-unit increase in x: Δy = 2.5 × 2 = 5.0. The intercept (10.3) and R² don't affect this calculation."
@@ -2187,12 +2187,12 @@ export const MCQ = {
     {
       q: "Neural network with MSE loss is essentially performing:",
       opts: [
-        "Classification",
         "Non-linear regression",
         "Clustering",
-        "Dimensionality reduction"
+        "Dimensionality reduction",
+        "Classification"
       ],
-      ans: 1,
+      ans: 0,
       exp: "MSE is the regression loss. A neural network with MSE loss and a linear output layer is performing non-linear regression — it can approximate any continuous function (universal approximation theorem)."
     }
   ],
@@ -2201,22 +2201,22 @@ export const MCQ = {
       q: "Bagging reduces which aspect of model error?",
       opts: [
         "Bias",
+        "Training time",
         "Variance",
-        "Irreducible noise",
-        "Training time"
+        "Irreducible noise"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Bagging (Bootstrap Aggregating) trains multiple models on different bootstrap samples and averages their predictions. Averaging reduces variance — individual model errors cancel out — without significantly affecting bias."
     },
     {
       q: "Boosting reduces which aspect of model error?",
       opts: [
-        "Variance",
-        "Bias",
+        "Neither",
         "Both equally",
-        "Neither"
+        "Variance",
+        "Bias"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Boosting is sequential: each model corrects the errors of previous ones. This progressively reduces bias (systematic errors). However, it can increase variance if too many rounds are used (overfitting risk)."
     },
     {
@@ -2224,8 +2224,8 @@ export const MCQ = {
       opts: [
         "Sampling features without replacement",
         "Sampling training rows WITH replacement for each tree",
-        "Sampling 50% of data for each tree",
-        "Sampling based on class distribution"
+        "Sampling based on class distribution",
+        "Sampling 50% of data for each tree"
       ],
       ans: 1,
       exp: "Each tree in Random Forest trains on a bootstrap sample: n rows drawn WITH replacement from training data. Some rows appear multiple times; ~37% are not included (out-of-bag samples)."
@@ -2233,78 +2233,78 @@ export const MCQ = {
     {
       q: "The 'random' in Random Forest comes from:",
       opts: [
-        "Random initialization of weights",
-        "Both random bootstrap samples AND random feature subsets at each split",
         "Random target shuffling",
-        "Random pruning of trees"
+        "Random pruning of trees",
+        "Both random bootstrap samples AND random feature subsets at each split",
+        "Random initialization of weights"
       ],
-      ans: 1,
+      ans: 2,
       exp: "RF has two sources of randomness: (1) bootstrap sampling — different data per tree; (2) random feature subset — at each split, only √p (classification) or p/3 (regression) features are considered. Both reduce correlation between trees."
     },
     {
       q: "In AdaBoost, misclassified samples in round t:",
       opts: [
+        "Receive higher weights so next model focuses on them",
         "Are removed from the next round",
         "Receive lower weights in the next round",
-        "Receive higher weights so next model focuses on them",
         "Are replaced by synthetic samples"
       ],
-      ans: 2,
+      ans: 0,
       exp: "AdaBoost's key mechanism: after each round, misclassified samples get their weights increased. The next weak learner focuses on getting these hard examples right. Correctly classified samples get lower weights."
     },
     {
       q: "XGBoost is different from standard Gradient Boosting because:",
       opts: [
-        "XGBoost uses bagging; GBM uses boosting",
         "XGBoost uses 2nd-order gradients (Hessian), L1+L2 regularization, and level-wise tree growth",
-        "XGBoost trains only one tree",
-        "XGBoost doesn't require feature engineering"
+        "XGBoost doesn't require feature engineering",
+        "XGBoost uses bagging; GBM uses boosting",
+        "XGBoost trains only one tree"
       ],
-      ans: 1,
+      ans: 0,
       exp: "XGBoost improves on GBM: uses both gradient (1st order) and Hessian (2nd order) for better convergence; adds L1+L2 regularization on tree weights; level-wise tree growth; column/row subsampling; handles missing values natively."
     },
     {
       q: "LightGBM uses Leaf-Wise tree growth instead of Level-Wise. This means:",
       opts: [
-        "All nodes at the same depth are split simultaneously",
         "The leaf with the largest loss reduction is split next",
-        "Trees grow symmetrically",
-        "Only leaf nodes are used for prediction"
+        "Only leaf nodes are used for prediction",
+        "All nodes at the same depth are split simultaneously",
+        "Trees grow symmetrically"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Leaf-wise growth splits the leaf that reduces loss the most, regardless of depth — trees grow asymmetrically. This is faster and achieves better accuracy, but can overfit on small datasets (use min_child_samples to control)."
     },
     {
       q: "CatBoost's main advantage over XGBoost and LightGBM is:",
       opts: [
-        "Fastest training speed",
-        "Native support for categorical features without preprocessing",
         "Simpler hyperparameter tuning",
-        "Built-in feature selection"
+        "Fastest training speed",
+        "Built-in feature selection",
+        "Native support for categorical features without preprocessing"
       ],
-      ans: 1,
+      ans: 3,
       exp: "CatBoost handles categorical features natively using a target-statistic encoding computed per permutation (preventing leakage). XGBoost and LightGBM require manual categorical encoding before training."
     },
     {
       q: "Out-of-Bag (OOB) error in Random Forest is:",
       opts: [
-        "Error computed on a separate validation set",
-        "Error computed on the ~37% of samples not used in each tree's bootstrap sample",
         "Error on the training set",
-        "Average error across all trees on test data"
+        "Average error across all trees on test data",
+        "Error computed on the ~37% of samples not used in each tree's bootstrap sample",
+        "Error computed on a separate validation set"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Since bootstrap sampling excludes ~37% of samples from each tree, each tree can be evaluated on its 'out-of-bag' samples without needing a separate validation set. OOB error is a reliable unbiased performance estimate."
     },
     {
       q: "Stacking (Stacked Generalization) combines models by:",
       opts: [
-        "Averaging their predictions equally",
         "Training a meta-learner on the predictions of base models as features",
-        "Multiplying predictions together",
-        "Using only the best-performing base model"
+        "Using only the best-performing base model",
+        "Averaging their predictions equally",
+        "Multiplying predictions together"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Stacking has two levels: Level 0 = diverse base models trained on data; Level 1 = a meta-learner trained on Level 0 predictions as inputs. The meta-learner learns how to optimally combine base model outputs."
     },
     {
@@ -2321,76 +2321,76 @@ export const MCQ = {
     {
       q: "GridSearchCV with 5-fold CV and 20 parameter combinations trains how many models total?",
       opts: [
-        "20",
-        "5",
+        "25",
         "100 (20 × 5)",
-        "25"
+        "20",
+        "5"
       ],
-      ans: 2,
+      ans: 1,
       exp: "Each parameter combination is evaluated with 5-fold CV = 5 model fits. With 20 combinations: 20 × 5 = 100 model fits total. Plus optionally a final refit on full training data."
     },
     {
       q: "RandomizedSearchCV advantage over GridSearchCV:",
       opts: [
         "Always finds the best hyperparameter set",
-        "Much faster",
         "Guarantees better accuracy",
+        "Much faster",
         "Uses fewer parameters"
       ],
-      ans: 1,
+      ans: 2,
       exp: "GridSearchCV exhaustively tries all combinations (exponential with more params). RandomizedSearchCV samples n_iter random combinations — often finds near-optimal results in a fraction of the time."
     },
     {
       q: "Bayesian Optimization for hyperparameter tuning differs from Grid/Random Search because:",
       opts: [
         "It uses gradient descent to find hyperparameters",
-        "It builds a probabilistic model of the objective function and intelligently selects next candidates based on past results",
         "It requires manual starting points",
-        "It works only for neural networks"
+        "It works only for neural networks",
+        "It builds a probabilistic model of the objective function and intelligently selects next candidates based on past results"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Bayesian Optimization fits a surrogate model (e.g., Gaussian Process) to results seen so far, then uses an acquisition function (e.g., Expected Improvement) to choose the next most promising hyperparameter set to evaluate."
     },
     {
       q: "Feature importance from Random Forest vs. XGBoost: main difference is:",
       opts: [
+        "XGBoost doesn't compute feature importance",
         "RF uses information gain; XGBoost uses Gini",
-        "RF importance based on mean impurity reduction; XGBoost can also use gain, cover, and frequency metrics",
         "Both compute identical importance scores",
-        "XGBoost doesn't compute feature importance"
+        "RF importance based on mean impurity reduction; XGBoost can also use gain, cover, and frequency metrics"
       ],
-      ans: 1,
+      ans: 3,
       exp: "XGBoost offers multiple importance types: gain (total information gain), cover (total samples affected), frequency (number of times used in splits). RF uses mean Gini/MSE reduction across all trees. Both are valid but give different rankings."
     },
     {
       q: "When is a single Decision Tree preferred over Random Forest?",
       opts: [
-        "When maximum accuracy is needed",
         "When model interpretability is critical and data is simple",
-        "When dataset is very large",
-        "When features are highly correlated"
+        "When features are highly correlated",
+        "When maximum accuracy is needed",
+        "When dataset is very large"
       ],
-      ans: 1,
+      ans: 0,
       exp: "A single Decision Tree can be visualized and explained as human-readable rules — crucial for regulated industries (medical, legal, financial). RF is a black box. For accuracy, RF wins; for explainability, a shallow tree wins."
     },
     {
       q: "Early stopping in XGBoost/LightGBM prevents:",
       opts: [
-        "Underfitting by adding more trees",
-        "Overfitting by stopping training when validation metric stops improving",
         "Data leakage",
-        "Multicollinearity among features"
+        "Multicollinearity among features",
+        "Overfitting by stopping training when validation metric stops improving",
+        "Underfitting by adding more trees"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Early stopping monitors a validation metric after each boosting round. If it doesn't improve for n consecutive rounds (early_stopping_rounds), training stops. This finds the optimal n_estimators automatically."
     },
     {
       q: "The learning_rate in Gradient Boosting / XGBoost controls:",
       opts: [
         "The depth of each tree",
-        "The fraction of data used per tree",
+        "The L2 regularization strength",
         "How much each new tree contributes to the final prediction",
-        "The L2 regularization strength"
+        "The fraction of data used per tree"
       ],
       ans: 2,
       exp: "learning_rate (eta) scales each tree's contribution: ŷ ← ŷ + η · h_t(x). Smaller η = smaller steps = more trees needed but often better generalization. It's the shrinkage parameter for the ensemble."
@@ -2398,32 +2398,32 @@ export const MCQ = {
     {
       q: "VotingClassifier with hard voting uses:",
       opts: [
-        "Probability averages",
-        "Majority class vote from all base estimators",
+        "The best single model's prediction",
         "Weighted sum of predictions",
-        "The best single model's prediction"
+        "Probability averages",
+        "Majority class vote from all base estimators"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Hard voting = each classifier votes a class label; the class with the most votes wins. Soft voting averages probabilities. For calibrated classifiers with reliable probability estimates, soft voting typically performs better."
     },
     {
       q: "In a Random Forest, increasing n_estimators (number of trees):",
       opts: [
         "Always overfits",
-        "Reduces variance",
         "Increases bias proportionally",
-        "Decreases tree depth automatically"
+        "Decreases tree depth automatically",
+        "Reduces variance"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Adding more trees reduces variance (due to more averaging) but never increases bias. Performance improves with more trees but plateaus — beyond ~100–500 trees, gains are marginal. Training time grows linearly."
     },
     {
       q: "AdaBoost's final prediction is:",
       opts: [
-        "Average of all weak learner predictions",
+        "Random choice from all learners",
         "Weighted majority vote",
         "The last weak learner's prediction",
-        "Random choice from all learners"
+        "Average of all weak learner predictions"
       ],
       ans: 1,
       exp: "AdaBoost assigns weight αₜ = 0.5·log((1−εₜ)/εₜ) to each weak learner based on its error εₜ. Final prediction = sign(Σαₜhₜ(x)) — low-error learners contribute more to the final decision."
@@ -2431,43 +2431,43 @@ export const MCQ = {
     {
       q: "n_estimators in XGBoost vs n_estimators in Random Forest: key difference is:",
       opts: [
-        "Both are interchangeable",
         "XGBoost: more trees can overfit (sequential)",
-        "RF needs fewer trees always",
-        "XGBoost trees are shallower"
+        "XGBoost trees are shallower",
+        "Both are interchangeable",
+        "RF needs fewer trees always"
       ],
-      ans: 1,
+      ans: 0,
       exp: "RF: parallel trees, more = better (just slower). XGBoost: sequential trees, more rounds = more fitting of residuals. Too many in XGBoost → overfit to training noise. Early stopping is essential for boosting."
     },
     {
       q: "The max_features parameter in Random Forest (commonly set to √p for classification):",
       opts: [
         "Limits the tree depth",
-        "Limits the number of features considered at each split",
         "Sets the bootstrap sample size",
-        "Determines minimum samples per leaf"
+        "Determines minimum samples per leaf",
+        "Limits the number of features considered at each split"
       ],
-      ans: 1,
+      ans: 3,
       exp: "At each split, only a random subset of √p features are considered. This decorrelates trees — if one feature dominates, not all trees use it at every split. Diversity → better ensemble averaging."
     },
     {
       q: "Hyperparameter tuning with cross-validation is done on:",
       opts: [
+        "A different dataset",
         "Test set",
         "Training set using k-fold CV",
-        "A different dataset",
         "The validation set within each training fold"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Hyperparameter tuning must be done using cross-validation on the training set only. Using the test set for tuning causes optimistic evaluation bias (the test set is 'used up')."
     },
     {
       q: "SHAP TreeExplainer is used with ensemble models to:",
       opts: [
-        "Compress the model for deployment",
+        "Speed up prediction",
         "Explain individual predictions by attributing contributions to each feature",
         "Select the best model from the ensemble",
-        "Speed up prediction"
+        "Compress the model for deployment"
       ],
       ans: 1,
       exp: "SHAP (SHapley Additive exPlanations) TreeExplainer provides exact SHAP values for tree-based models, showing each feature's contribution to a specific prediction. Enables both local (per instance) and global model explanations."
@@ -2476,22 +2476,22 @@ export const MCQ = {
       q: "Which ensemble method is most likely to overfit with weak base learners?",
       opts: [
         "Bagging",
-        "Boosting",
         "Stacking with simple meta-learner",
-        "Averaging"
+        "Averaging",
+        "Boosting"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Boosting sequentially fits residuals — given enough rounds, it can perfectly fit training data (including noise). Bagging averages independent noisy predictions, so overfitting is much less common."
     },
     {
       q: "For a Kaggle competition tabular dataset, which model family usually wins?",
       opts: [
         "Logistic Regression",
-        "Support Vector Machines",
         "Gradient Boosting (XGBoost/LightGBM/CatBoost)",
-        "K-Nearest Neighbors"
+        "K-Nearest Neighbors",
+        "Support Vector Machines"
       ],
-      ans: 2,
+      ans: 1,
       exp: "Gradient boosting frameworks (especially XGBoost, LightGBM, CatBoost) consistently dominate tabular data competitions due to their ability to capture complex non-linear patterns, handle missing values, and efficient built-in regularization."
     },
     {
@@ -2499,8 +2499,8 @@ export const MCQ = {
       opts: [
         "Minimum number of trees",
         "Minimum sum of instance weights (hessian) required in a leaf",
-        "Minimum feature importance threshold",
-        "Minimum learning rate"
+        "Minimum learning rate",
+        "Minimum feature importance threshold"
       ],
       ans: 1,
       exp: "min_child_weight is the minimum sum of hessian in a child node. Higher value = more conservative — prevents creating leaves from very few samples. It's a key regularization parameter against overfitting on small subgroups."
@@ -2508,32 +2508,32 @@ export const MCQ = {
     {
       q: "subsample=0.8 in XGBoost means:",
       opts: [
+        "80% of weak learners are used",
         "80% of features are used per tree",
         "80% of training rows are randomly sampled for each tree",
-        "Trees are 80% of maximum depth",
-        "80% of weak learners are used"
+        "Trees are 80% of maximum depth"
       ],
-      ans: 1,
+      ans: 2,
       exp: "subsample (row subsampling) uses 80% of training rows randomly for each tree, similar to stochastic gradient descent. This reduces overfitting and speeds up training. colsample_bytree does the same for features."
     },
     {
       q: "Gradient Boosting's key weakness compared to Random Forest is:",
       opts: [
-        "Lower accuracy on tabular data",
         "More sensitive to hyperparameters and can overfit if not carefully tuned",
         "Cannot handle regression problems",
+        "Lower accuracy on tabular data",
         "Does not support feature importance"
       ],
-      ans: 1,
+      ans: 0,
       exp: "GBM/XGBoost require careful tuning of n_estimators, learning_rate, max_depth, etc. and can overfit. Random Forest is more robust with default settings — a good starting point when you're not sure what to tune."
     },
     {
       q: "In a Voting Ensemble, adding a very correlated model (same predictions as an existing one):",
       opts: [
-        "Significantly improves performance",
+        "Is always recommended",
         "Provides no benefit",
-        "Reduces variance dramatically",
-        "Is always recommended"
+        "Significantly improves performance",
+        "Reduces variance dramatically"
       ],
       ans: 1,
       exp: "Ensemble methods benefit from diverse, uncorrelated models. Adding a model that predicts exactly like an existing one is equivalent to voting twice with one opinion — no new information, no improvement."
@@ -2542,108 +2542,108 @@ export const MCQ = {
       q: "The 'depth' parameter in XGBoost (max_depth) should be:",
       opts: [
         "As large as possible",
-        "Typically 3–8; shallow trees are preferred in boosting to avoid overfitting",
         "Equal to number of features",
+        "Typically 3–8; shallow trees are preferred in boosting to avoid overfitting",
         "Set to 1 always (stumps)"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Boosting with deep trees overfits since each tree already captures too much. Shallow trees (3–8) are 'weak learners' that each capture a piece of the pattern. AdaBoost classically uses stumps (depth=1)."
     },
     {
       q: "Blending vs Stacking: main difference is:",
       opts: [
-        "Blending uses all training data; stacking uses cross-validation",
         "Stacking trains meta-learner on full training set; blending uses a holdout set for meta-learner features",
         "Both are identical",
+        "Blending uses all training data; stacking uses cross-validation",
         "Blending is only for regression"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Stacking uses k-fold CV to generate out-of-fold predictions as meta-features (no leakage). Blending uses a simpler holdout set for the meta-learner. Stacking is more robust; blending is simpler and faster."
     },
     {
       q: "Random Forest feature importance is sometimes criticized because:",
       opts: [
         "It ignores categorical features",
-        "It can be biased toward high-cardinality and continuous features",
         "It only works for classification",
-        "It requires feature scaling"
+        "It requires feature scaling",
+        "It can be biased toward high-cardinality and continuous features"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Impurity-based (Gini/variance) importance can be biased toward features with more possible splits (high cardinality or continuous). Permutation importance is a more reliable alternative that doesn't have this bias."
     },
     {
       q: "Which hyperparameter tuning technique explores the most combinations given equal compute budget?",
       opts: [
-        "Grid Search",
         "Random Search with the same n_iter as grid combinations",
         "Bayesian Optimization",
-        "Manual search"
+        "Manual search",
+        "Grid Search"
       ],
-      ans: 2,
+      ans: 1,
       exp: "Bayesian Optimization intelligently uses past evaluations to focus compute on promising regions of the hyperparameter space. It finds good solutions much faster than grid or random search for the same number of evaluations."
     },
     {
       q: "In boosting, the learning_rate = 0.1 means:",
       opts: [
-        "10% of training data is used per round",
         "Each new tree's prediction is multiplied by 0.1 before adding to ensemble",
+        "10% of features are sampled",
         "The optimizer takes steps of size 0.1",
-        "10% of features are sampled"
+        "10% of training data is used per round"
       ],
-      ans: 1,
+      ans: 0,
       exp: "learning_rate (shrinkage) scales the contribution of each tree: Fₜ(x) = Fₜ₋₁(x) + η·hₜ(x). η=0.1 means each tree only adds 10% of its 'full' correction. Smaller η = more regularization, needs more trees."
     },
     {
       q: "An ensemble of 5 models has CV scores: [0.82, 0.83, 0.91, 0.81, 0.82]. Soft voting will likely give:",
       opts: [
         "Exactly 0.91",
+        "Exactly the average (0.838)",
         "Better than the average (0.838) but similar to the best model",
-        "Worse than all individual models",
-        "Exactly the average (0.838)"
+        "Worse than all individual models"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Ensemble methods typically outperform individual models because errors partially cancel. Soft voting should exceed the average and approach or exceed the best individual model — especially since models have diverse strengths."
     },
     {
       q: "The 'gamma' parameter in XGBoost controls:",
       opts: [
+        "Row subsampling rate",
         "Learning rate",
-        "Minimum loss reduction required to make a split",
         "Number of features per tree",
-        "Row subsampling rate"
+        "Minimum loss reduction required to make a split"
       ],
-      ans: 1,
+      ans: 3,
       exp: "gamma (min_split_loss) specifies the minimum loss reduction for a node to be split. Higher gamma = only splits that significantly reduce loss are made → shallower, more regularized trees. Helps prevent overfitting."
     },
     {
       q: "Random Forest vs Extra Trees (Extremely Randomized Trees): key difference:",
       opts: [
+        "Extra Trees uses fewer trees",
         "Extra Trees uses boosting; RF uses bagging",
         "Extra Trees adds extra randomness by choosing both the split feature AND threshold randomly",
-        "RF doesn't use bootstrap sampling; Extra Trees does",
-        "Extra Trees uses fewer trees"
+        "RF doesn't use bootstrap sampling; Extra Trees does"
       ],
-      ans: 1,
+      ans: 2,
       exp: "ExtraTreesClassifier chooses split thresholds randomly (not optimally), adding more randomness than RF. This further reduces variance but may increase bias slightly. It's often faster since no optimal threshold search is needed."
     },
     {
       q: "When to use CatBoost over XGBoost?",
       opts: [
-        "When training speed is the top priority",
         "When dataset has many categorical features requiring minimal preprocessing",
-        "When interpretability is critical",
-        "When dataset is very small"
+        "When training speed is the top priority",
+        "When dataset is very small",
+        "When interpretability is critical"
       ],
-      ans: 1,
+      ans: 0,
       exp: "CatBoost handles categorical features natively with built-in ordered target statistics — no manual encoding needed. For datasets with many categorical features (e.g., e-commerce, user data), CatBoost saves preprocessing time and often improves accuracy."
     },
     {
       q: "The `colsample_bytree=0.8` in XGBoost:",
       opts: [
-        "Selects 80% of training rows per tree",
+        "Sets tree depth to 80% of maximum",
         "Randomly selects 80% of features for each tree",
-        "Uses 80% of available CPU cores",
-        "Sets tree depth to 80% of maximum"
+        "Selects 80% of training rows per tree",
+        "Uses 80% of available CPU cores"
       ],
       ans: 1,
       exp: "colsample_bytree randomly samples 80% of features for each tree (column subsampling). Combined with subsample (row sampling), this introduces randomness similar to Random Forest, reducing overfitting."
@@ -2651,9 +2651,9 @@ export const MCQ = {
     {
       q: "Permutation feature importance is more reliable than impurity-based importance because:",
       opts: [
-        "It's faster to compute",
-        "It measures how shuffling a feature's values increases model error",
         "It uses gradient information",
+        "It measures how shuffling a feature's values increases model error",
+        "It's faster to compute",
         "It works only for linear models"
       ],
       ans: 1,
@@ -2663,19 +2663,19 @@ export const MCQ = {
       q: "Weak learner in AdaBoost is typically:",
       opts: [
         "A Random Forest",
+        "KNN with k=1",
         "A Decision Tree with max_depth=1",
-        "Logistic Regression",
-        "KNN with k=1"
+        "Logistic Regression"
       ],
-      ans: 1,
+      ans: 2,
       exp: "AdaBoost typically uses decision stumps (single-split trees, depth=1) as weak learners. These are 'just better than random' — each captures one simple rule. Combining many weighted stumps creates a powerful classifier."
     },
     {
       q: "What is the purpose of n_jobs=-1 in sklearn ensemble models?",
       opts: [
-        "Limit the number of trees to CPU count",
-        "Use all available CPU cores to parallelize tree training",
         "Set number of bootstrap samples",
+        "Use all available CPU cores to parallelize tree training",
+        "Limit the number of trees to CPU count",
         "Control random seed"
       ],
       ans: 1,
@@ -2684,67 +2684,67 @@ export const MCQ = {
     {
       q: "After hyperparameter tuning with cross-validation, the final model should be trained on:",
       opts: [
+        "Half the training data",
         "Only the training fold that gave best CV result",
-        "Full training data (train + validation) with the best hyperparameters found",
         "The test set to include all available data",
-        "Half the training data"
+        "Full training data (train + validation) with the best hyperparameters found"
       ],
-      ans: 1,
+      ans: 3,
       exp: "After finding optimal hyperparameters via CV, retrain the model on ALL training data (all folds combined) with those hyperparameters. This maximizes training data usage. Then evaluate once on the held-out test set."
     },
     {
       q: "The bias-variance tradeoff in ensemble learning: Bagging reduces variance by:",
       opts: [
         "Making each tree simpler",
-        "Averaging n trees",
         "Sequential correction of errors",
-        "Using deeper trees"
+        "Using deeper trees",
+        "Averaging n trees"
       ],
-      ans: 1,
+      ans: 3,
       exp: "If n independent models each have variance σ², their average has variance σ²/n. Trees aren't fully independent in bagging (correlated due to same training distribution), so reduction is less than √n, but still substantial."
     },
     {
       q: "XGBoost with 'reg_alpha' sets which regularization?",
       opts: [
         "L2 regularization on leaf weights",
+        "Row subsampling",
         "L1 regularization on leaf weights",
-        "Regularization on learning rate",
-        "Row subsampling"
+        "Regularization on learning rate"
       ],
-      ans: 1,
+      ans: 2,
       exp: "reg_alpha = L1 (Lasso-like) regularization on leaf scores in XGBoost. reg_lambda = L2 (Ridge-like). L1 promotes sparse trees (some leaves get zero weights). Both prevent overfitting, with reg_lambda being XGBoost's default regularization."
     },
     {
       q: "LightGBM is faster than XGBoost primarily because:",
       opts: [
+        "It uses decision stumps only",
         "It uses fewer trees",
-        "Leaf-wise tree growth + Gradient-based One-Side Sampling (GOSS) + Exclusive Feature Bundling (EFB)",
         "It doesn't use regularization",
-        "It uses decision stumps only"
+        "Leaf-wise tree growth + Gradient-based One-Side Sampling (GOSS) + Exclusive Feature Bundling (EFB)"
       ],
-      ans: 1,
+      ans: 3,
       exp: "LightGBM uses: leaf-wise growth (more efficient); GOSS (down-samples less informative samples, keeping hard examples); EFB (bundles sparse features). These together give 10–20x speedup over XGBoost on large datasets."
     },
     {
       q: "In a stacking ensemble, the meta-learner (Level 2 model) should ideally be:",
       opts: [
         "The most powerful model",
-        "A simple model to avoid overfitting on base-model predictions",
         "Same as the base models",
-        "Always a Decision Tree"
+        "Always a Decision Tree",
+        "A simple model to avoid overfitting on base-model predictions"
       ],
-      ans: 1,
+      ans: 3,
       exp: "The meta-learner sees only a few features (base model predictions). A complex meta-learner easily overfits on this small feature set. Simple regularized models (Logistic Regression, Ridge) work best as meta-learners."
     },
     {
       q: "Feature importance from tree models can guide feature selection. After eliminating low-importance features, you should:",
       opts: [
-        "Retrain once and accept results",
         "Re-evaluate using cross-validation",
-        "Accept the original model's results",
-        "Immediately deploy the simplified model"
+        "Retrain once and accept results",
+        "Immediately deploy the simplified model",
+        "Accept the original model's results"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Feature importances are model-dependent. After removing features, importance rankings shift. Always re-run CV to verify the simplified model genuinely performs as well or better before deployment."
     }
   ],
@@ -2752,21 +2752,21 @@ export const MCQ = {
     {
       q: "K-Means is sensitive to outliers because:",
       opts: [
-        "It uses rank-based distances",
-        "Cluster centroids are means",
+        "Outliers increase the number of clusters automatically",
         "It uses Euclidean distance only",
-        "Outliers increase the number of clusters automatically"
+        "It uses rank-based distances",
+        "Cluster centroids are means"
       ],
-      ans: 1,
+      ans: 3,
       exp: "K-Means centroids = arithmetic means of cluster members. A single extreme outlier drastically shifts the centroid. K-Medoids solves this by using actual data points (medoids) as cluster centers."
     },
     {
       q: "The Elbow Method for choosing K in K-Means uses:",
       opts: [
-        "Silhouette Score plot",
-        "Inertia vs K plot",
         "Davies-Bouldin Index vs K",
-        "Dendrogram cutting height"
+        "Inertia vs K plot",
+        "Dendrogram cutting height",
+        "Silhouette Score plot"
       ],
       ans: 1,
       exp: "Plot inertia (total within-cluster variance) for K=1 to K=10. As K increases, inertia always decreases. The 'elbow' — where improvement rate drops sharply — suggests the optimal K."
@@ -2774,21 +2774,21 @@ export const MCQ = {
     {
       q: "DBSCAN's ε (epsilon) parameter controls:",
       opts: [
-        "Maximum number of clusters",
-        "The neighborhood radius",
+        "Number of iterations",
         "Minimum cluster size",
-        "Number of iterations"
+        "Maximum number of clusters",
+        "The neighborhood radius"
       ],
-      ans: 1,
+      ans: 3,
       exp: "ε is the radius of the neighborhood search. Points within ε distance of each other are neighbors. Too small ε = everything is noise; too large = everything merges into one cluster."
     },
     {
       q: "A point labeled -1 by DBSCAN is:",
       opts: [
-        "A cluster centroid",
-        "A noise point / outlier",
         "A border point",
-        "A core point with no neighbors"
+        "A noise point / outlier",
+        "A core point with no neighbors",
+        "A cluster centroid"
       ],
       ans: 1,
       exp: "DBSCAN labels noise points (outliers) as -1. These are points that don't have min_samples neighbors within ε and are not within ε of a core point. This is a powerful built-in anomaly detection feature."
@@ -2796,23 +2796,23 @@ export const MCQ = {
     {
       q: "Silhouette Score closer to +1 means:",
       opts: [
-        "Data point is in the wrong cluster",
         "Data point is close to its own cluster and far from neighboring clusters",
+        "The cluster has only one point",
         "Equal distances to all clusters",
-        "The cluster has only one point"
+        "Data point is in the wrong cluster"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Silhouette(i) = (b−a)/max(a,b) where a=mean intra-cluster distance, b=mean nearest-cluster distance. Score near +1 means a << b — well-clustered. Near 0 = on boundary. Near −1 = misclassified."
     },
     {
       q: "Cosine similarity is preferred over Euclidean distance for text clustering because:",
       opts: [
-        "It's computationally cheaper",
         "It measures angle/direction",
-        "It works for binary features only",
-        "It's equivalent to Euclidean for normalized vectors"
+        "It's equivalent to Euclidean for normalized vectors",
+        "It's computationally cheaper",
+        "It works for binary features only"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Cosine similarity measures the angle between vector orientations, ignoring magnitude. A short document and a long document about the same topic have high cosine similarity. Euclidean distance would show them as far apart."
     },
     {
@@ -2830,22 +2830,22 @@ export const MCQ = {
       q: "Davies-Bouldin Index: lower values indicate:",
       opts: [
         "More clusters",
-        "Better clustering",
         "Higher noise ratio",
-        "More iterations needed"
+        "More iterations needed",
+        "Better clustering"
       ],
-      ans: 1,
+      ans: 3,
       exp: "DBI = avg(max((sᵢ+sⱼ)/dᵢⱼ)) where sᵢ=cluster scatter, dᵢⱼ=centroid distance. Lower DBI = clusters are tighter (small scatter) and farther apart (large distance). DBI=0 is perfect."
     },
     {
       q: "K-Medoids differs from K-Means in that:",
       opts: [
-        "K-Medoids uses Euclidean distance; K-Means uses Manhattan",
         "K-Medoids cluster centers must be actual data points",
         "K-Medoids doesn't require choosing K",
+        "K-Medoids uses Euclidean distance; K-Means uses Manhattan",
         "K-Medoids is always faster"
       ],
-      ans: 1,
+      ans: 0,
       exp: "K-Medoids (PAM) uses the actual data point that minimizes total dissimilarity to cluster members (medoid), unlike K-Means which uses the computed mean. Since medoids are real points, outliers have less influence."
     },
     {
@@ -2862,10 +2862,10 @@ export const MCQ = {
     {
       q: "Isolation Forest detects anomalies because:",
       opts: [
-        "It computes the distance to the cluster centroid",
-        "Anomalies are isolated in fewer random splits",
         "It uses the Z-score internally",
-        "Anomalies have larger silhouette scores"
+        "Anomalies are isolated in fewer random splits",
+        "Anomalies have larger silhouette scores",
+        "It computes the distance to the cluster centroid"
       ],
       ans: 1,
       exp: "Isolation Forest builds random trees by repeatedly splitting on random feature + threshold. Normal points need many splits to isolate (dense neighborhood); anomalies are isolated quickly (short path length). Score = average path length."
@@ -2873,23 +2873,23 @@ export const MCQ = {
     {
       q: "Local Outlier Factor (LOF) detects anomalies based on:",
       opts: [
-        "Global statistical properties (Z-score)",
         "Local density comparison",
         "Cluster distance metrics",
+        "Global statistical properties (Z-score)",
         "Isolation tree path lengths"
       ],
-      ans: 1,
+      ans: 0,
       exp: "LOF computes the ratio of average density of k-nearest neighbors to the point's own density. A point with much lower density than its neighbors (LOF >> 1) is a local outlier. It captures local anomalies that global methods miss."
     },
     {
       q: "A city wants to identify natural districts based on crime statistics. Best algorithm:",
       opts: [
-        "Logistic Regression",
-        "K-Means or DBSCAN clustering",
+        "Linear Regression",
         "Decision Tree",
-        "Linear Regression"
+        "Logistic Regression",
+        "K-Means or DBSCAN clustering"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Grouping geographic areas based on similar crime patterns is unsupervised — there are no predefined 'correct' district labels. Clustering discovers natural groupings. K-Means works for roughly circular clusters; DBSCAN for arbitrary shapes."
     },
     {
@@ -2906,21 +2906,21 @@ export const MCQ = {
     {
       q: "For a customer segmentation task with non-spherical, varied-density customer groups, choose:",
       opts: [
-        "K-Means",
-        "DBSCAN",
         "Both are equally appropriate",
-        "PCA followed by K-Means"
+        "K-Means",
+        "PCA followed by K-Means",
+        "DBSCAN"
       ],
-      ans: 1,
+      ans: 3,
       exp: "DBSCAN handles arbitrary shapes and varied densities. K-Means forces spherical, similar-sized clusters. For non-spherical customer groups (e.g., a dense urban cluster and a sparse rural cluster), DBSCAN is more natural."
     },
     {
       q: "Euclidean distance between [1,2] and [4,6] is:",
       opts: [
         "5",
-        "7",
+        "25",
         "3",
-        "25"
+        "7"
       ],
       ans: 0,
       exp: "Euclidean distance = √((4−1)² + (6−2)²) = √(9+16) = √25 = 5. This is the straight-line distance in 2D space."
@@ -2928,12 +2928,12 @@ export const MCQ = {
     {
       q: "Manhattan distance between [1,2] and [4,6] is:",
       opts: [
-        "5",
-        "7",
         "3",
-        "25"
+        "5",
+        "25",
+        "7"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Manhattan distance = |4−1| + |6−2| = 3 + 4 = 7. It sums absolute differences along each axis — like navigating a city grid (hence 'city block distance')."
     },
     {
@@ -2941,8 +2941,8 @@ export const MCQ = {
       opts: [
         "Compute new centroids as means of assigned points",
         "Recompute the number of clusters K",
-        "Apply silhouette scoring",
-        "Remove outlier clusters"
+        "Remove outlier clusters",
+        "Apply silhouette scoring"
       ],
       ans: 0,
       exp: "K-Means alternates: (1) Assign each point to nearest centroid; (2) Update centroids = mean of assigned points; repeat until convergence. The update step is what makes K-Means iteratively improve."
@@ -2952,8 +2952,8 @@ export const MCQ = {
       opts: [
         "Excellent clustering",
         "The average customer in this segment is closer to another segment than their own",
-        "Too many clusters",
-        "Need more data"
+        "Need more data",
+        "Too many clusters"
       ],
       ans: 1,
       exp: "Silhouette near −1 means a point is farther from its own cluster than from the nearest other cluster. Score = −0.2 suggests these customers might be misassigned — they'd fit better in a different cluster."
@@ -2962,11 +2962,11 @@ export const MCQ = {
       q: "In anomaly detection for network intrusion, which method is appropriate for capturing non-linear anomaly patterns?",
       opts: [
         "Z-score threshold",
-        "Isolation Forest",
+        "K-Means clustering only",
         "IQR method",
-        "K-Means clustering only"
+        "Isolation Forest"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Isolation Forest works in high dimensions and captures non-linear anomaly patterns. Z-score and IQR are univariate and linear. Network intrusion data has complex multi-feature interactions — Isolation Forest handles these well."
     },
     {
@@ -2974,8 +2974,8 @@ export const MCQ = {
       opts: [
         "Determined automatically by the algorithm",
         "Specified in advance by the practitioner",
-        "Equal to the number of features",
-        "Always the square root of n_samples"
+        "Always the square root of n_samples",
+        "Equal to the number of features"
       ],
       ans: 1,
       exp: "K is a hyperparameter in K-Means — you must specify it before running. This is K-Means' main limitation. DBSCAN and hierarchical clustering don't require K in advance."
@@ -2983,43 +2983,43 @@ export const MCQ = {
     {
       q: "Complete Linkage (in hierarchical clustering) merges clusters based on:",
       opts: [
-        "Minimum distance between any two members",
-        "Maximum distance between any two members of the two clusters",
+        "Distance between centroids",
         "Average of all pairwise distances",
-        "Distance between centroids"
+        "Maximum distance between any two members of the two clusters",
+        "Minimum distance between any two members"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Complete linkage = max(d(a,b)) for a∈Cluster1, b∈Cluster2. It merges clusters by their farthest points, creating compact clusters. Single linkage uses the minimum distance — prone to chaining."
     },
     {
       q: "A DBSCAN parameter min_samples=5 means:",
       opts: [
         "Maximum 5 clusters are formed",
-        "A point is a core point only if it has ≥5 neighbors within ε",
+        "Clusters must have ≥5 points to be valid",
         "Only samples with 5+ features are used",
-        "Clusters must have ≥5 points to be valid"
+        "A point is a core point only if it has ≥5 neighbors within ε"
       ],
-      ans: 1,
+      ans: 3,
       exp: "min_samples is the minimum number of points within ε for a point to be a core point. Core points form cluster interiors. border points are within ε of a core but have fewer than min_samples neighbors."
     },
     {
       q: "Why is feature scaling important for K-Means clustering?",
       opts: [
-        "K-Means requires scaled data for the algorithm to converge",
         "K-Means uses Euclidean distances",
+        "Scaling reduces K needed",
         "K-Means fails completely without scaling",
-        "Scaling reduces K needed"
+        "K-Means requires scaled data for the algorithm to converge"
       ],
-      ans: 1,
+      ans: 0,
       exp: "If salary (0–1M) and age (0–100) are used together unscaled, the salary dimension completely dominates cluster assignments. StandardScaler or MinMaxScaler ensures all features contribute equally to the distance calculation."
     },
     {
       q: "Elliptic Envelope for anomaly detection assumes:",
       opts: [
-        "Any data distribution",
+        "Features are independent",
         "Data follows a Gaussian (normal) distribution",
         "Data forms distinct clusters",
-        "Features are independent"
+        "Any data distribution"
       ],
       ans: 1,
       exp: "Elliptic Envelope fits a multivariate Gaussian distribution (an ellipse in 2D, ellipsoid in higher D) to the data. Points outside a given Mahalanobis distance threshold are anomalies. Works well when data is truly Gaussian."
@@ -3028,41 +3028,41 @@ export const MCQ = {
       q: "Hierarchical clustering's main advantage over K-Means:",
       opts: [
         "Runs faster on large datasets",
-        "Doesn't require specifying K",
         "Handles outliers better",
+        "Doesn't require specifying K",
         "Works with categorical data natively"
       ],
-      ans: 1,
+      ans: 2,
       exp: "The dendrogram shows the full merge hierarchy. You can choose K retrospectively by cutting at different heights, exploring different granularities of clustering. K-Means requires fixing K before running."
     },
     {
       q: "Inertia in K-Means is defined as:",
       opts: [
-        "Average silhouette score",
         "Sum of squared distances from each point to its assigned centroid",
         "Between-cluster distance",
-        "Number of iterations to convergence"
+        "Number of iterations to convergence",
+        "Average silhouette score"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Inertia = Σᵢ Σₓ∈Cᵢ ||x − μᵢ||² — total within-cluster sum of squared distances. Lower inertia = tighter, more compact clusters. It always decreases with more K, so use the elbow method to find optimal K."
     },
     {
       q: "A retailer clusters customers and gets Silhouette=0.62. This is:",
       opts: [
-        "Poor",
-        "Good",
+        "Depends on K only",
         "Perfect",
-        "Depends on K only"
+        "Good",
+        "Poor"
       ],
-      ans: 1,
+      ans: 2,
       exp: "Silhouette score > 0.5 is generally considered good clustering (clear, well-separated clusters). > 0.7 is strong. 0.62 indicates reasonably distinct customer segments that make business sense to act on."
     },
     {
       q: "DBSCAN with very large ε will:",
       opts: [
-        "Create many small clusters",
-        "Merge most points into one cluster (under-clustering)",
         "Identify more noise points",
+        "Merge most points into one cluster (under-clustering)",
+        "Create many small clusters",
         "Have no effect on clustering"
       ],
       ans: 1,
@@ -3071,45 +3071,45 @@ export const MCQ = {
     {
       q: "K-Means++ initialization (vs random initialization) improves:",
       opts: [
-        "Convergence speed and final clustering quality by spreading initial centroids",
-        "The silhouette score formula",
         "Algorithm's ability to handle non-spherical clusters",
-        "Automatic K selection"
+        "The silhouette score formula",
+        "Automatic K selection",
+        "Convergence speed and final clustering quality by spreading initial centroids"
       ],
-      ans: 0,
+      ans: 3,
       exp: "K-Means++ chooses the first centroid randomly, then each subsequent centroid with probability proportional to distance squared from existing centroids. This spreads centroids, reducing risk of bad local minima. sklearn uses K-Means++ by default."
     },
     {
       q: "Cosine distance between two identical document vectors is:",
       opts: [
+        "-1",
         "1",
-        "0 (minimum distance",
         "0.5",
-        "-1"
+        "0 (minimum distance"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Cosine similarity = 1 for identical vectors (angle=0°). Cosine distance = 1 − cosine_similarity = 1 − 1 = 0. Two identical documents have 0 cosine distance — perfectly similar."
     },
     {
       q: "An e-commerce platform wants to group products with no pre-defined categories. The appropriate ML approach:",
       opts: [
-        "Logistic Regression with One-vs-Rest",
         "Unsupervised clustering",
+        "Decision Tree Classification",
         "SVM with RBF kernel",
-        "Decision Tree Classification"
+        "Logistic Regression with One-vs-Rest"
       ],
-      ans: 1,
+      ans: 0,
       exp: "Without predefined categories/labels, this is an unsupervised learning problem. Clustering discovers natural groupings based on product features (price, category tags, purchase patterns) without needing labeled examples."
     },
     {
       q: "The Rand Index measures:",
       opts: [
+        "Variance within clusters",
         "Inertia-to-silhouette ratio",
-        "Clustering quality when ground truth labels are available",
         "Distance between cluster centroids",
-        "Variance within clusters"
+        "Clustering quality when ground truth labels are available"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Rand Index = (TP+TN)/total pairs — proportion of point pairs correctly grouped (same cluster if truly same, different clusters if truly different). Adjusted Rand Index (ARI) corrects for chance agreements."
     },
     {
@@ -3126,12 +3126,12 @@ export const MCQ = {
     {
       q: "Feature selection before clustering is important because:",
       opts: [
-        "Clustering algorithms can't handle > 10 features",
-        "Irrelevant/noisy features add dimensions that dilute meaningful distances",
         "Scaling is not possible with many features",
-        "Clusters must be balanced in size"
+        "Clusters must be balanced in size",
+        "Irrelevant/noisy features add dimensions that dilute meaningful distances",
+        "Clustering algorithms can't handle > 10 features"
       ],
-      ans: 1,
+      ans: 2,
       exp: "In high dimensions, all points appear equidistant (Curse of Dimensionality) — distance-based clustering breaks down. Removing irrelevant features and applying PCA makes distances more meaningful and clustering more effective."
     },
     {
@@ -3148,75 +3148,75 @@ export const MCQ = {
     {
       q: "In a fraud detection system, using DBSCAN, fraudulent transactions are likely labeled as:",
       opts: [
-        "Large, dense clusters",
-        "Noise points (-1)",
         "The first cluster",
-        "Core points of small clusters"
+        "Large, dense clusters",
+        "Core points of small clusters",
+        "Noise points (-1)"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Fraudulent transactions are rare and atypical — they don't form dense enough neighborhoods to be core points. DBSCAN labels them as noise (-1), making DBSCAN a natural anomaly detector."
     },
     {
       q: "Hierarchical clustering time complexity O(n³) means:",
       opts: [
         "It scales well to millions of records",
+        "It trains 3 models in sequence",
         "It's impractical for large datasets",
-        "It requires cubic features",
-        "It trains 3 models in sequence"
+        "It requires cubic features"
       ],
-      ans: 1,
+      ans: 2,
       exp: "O(n³) time complexity (naive implementation; O(n² log n) with optimizations) makes hierarchical clustering too slow for large datasets. It's best for small-medium datasets where the dendrogram's interpretability is valuable."
     },
     {
       q: "Gaussian Mixture Models (GMM) compared to K-Means:",
       opts: [
+        "GMM requires fewer parameters",
         "Both produce hard cluster assignments",
-        "GMM provides soft (probabilistic) cluster membership and can fit elliptical clusters",
         "GMM always produces worse results",
-        "GMM requires fewer parameters"
+        "GMM provides soft (probabilistic) cluster membership and can fit elliptical clusters"
       ],
-      ans: 1,
+      ans: 3,
       exp: "K-Means gives hard assignments (each point belongs to exactly one cluster). GMM models clusters as Gaussians with full covariance matrices, providing probabilities of belonging to each cluster and handling elliptical shapes."
     },
     {
       q: "The optimal epsilon for DBSCAN can be estimated using:",
       opts: [
         "Elbow method on inertia",
-        "K-distance plot",
         "Silhouette score grid search",
-        "Random search"
+        "Random search",
+        "K-distance plot"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Plot each point's distance to its k-th nearest neighbor (k=min_samples), sorted ascending. The 'knee' (sharp bend) suggests a good ε — below this, points are in dense neighborhoods; above, they're in sparse regions."
     },
     {
       q: "After clustering customers into 4 segments, labeling them 'Budget', 'Moderate', 'Premium', 'Luxury' is:",
       opts: [
         "Part of the algorithm output",
-        "A human interpretation step that requires domain knowledge after seeing cluster statistics",
         "Automatically done by K-Means",
-        "Based solely on Silhouette Score"
+        "Based solely on Silhouette Score",
+        "A human interpretation step that requires domain knowledge after seeing cluster statistics"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Clustering algorithms produce numbered clusters (0,1,2,3) with no business meaning. Human interpretation — looking at cluster centroids/statistics (average spend, purchase frequency) — is required to assign meaningful labels."
     },
     {
       q: "Principal Component Analysis is often applied before clustering. Why?",
       opts: [
+        "PCA converts clustering to classification",
         "PCA selects the most important cluster",
         "PCA reduces dimensionality",
-        "PCA determines the optimal K",
-        "PCA converts clustering to classification"
+        "PCA determines the optimal K"
       ],
-      ans: 1,
+      ans: 2,
       exp: "High-dimensional data suffers from the Curse of Dimensionality. PCA reduces to a compact representation that captures most variance. Clustering on 2–10 PCA components is faster and produces more meaningful results than on 100+ raw features."
     },
     {
       q: "K-Means with K=1 results in:",
       opts: [
-        "An error",
-        "All points in one cluster",
         "No clustering done",
+        "All points in one cluster",
+        "An error",
         "Each point is its own cluster"
       ],
       ans: 1,
@@ -3227,8 +3227,8 @@ export const MCQ = {
       opts: [
         "Anomaly detection is always less accurate",
         "Anomaly detection doesn't require labeled fraud examples",
-        "Supervised detection can't handle new fraud types",
-        "Anomaly detection only works in 2D"
+        "Anomaly detection only works in 2D",
+        "Supervised detection can't handle new fraud types"
       ],
       ans: 1,
       exp: "Labeled fraud data is expensive and rare. Anomaly detection learns what 'normal' looks like, flagging deviations — no labels needed. Supervised methods need labeled examples but can be very precise when good labels exist."
@@ -3236,34 +3236,34 @@ export const MCQ = {
     {
       q: "DBSCAN min_samples=2 creates:",
       opts: [
-        "More clusters",
-        "Very lenient core point condition",
         "Fewer, larger clusters",
-        "No change compared to default"
+        "More clusters",
+        "No change compared to default",
+        "Very lenient core point condition"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Low min_samples = almost any dense pair creates a cluster — very few points are labeled noise. High min_samples = stricter core point condition, more noise. Tune both ε and min_samples together based on domain expectations."
     },
     {
       q: "Cluster validation using Silhouette requires:",
       opts: [
         "Ground truth labels",
-        "Only the clustering result and feature matrix",
         "The dendrogram",
-        "The number of clusters to be > 5"
+        "The number of clusters to be > 5",
+        "Only the clustering result and feature matrix"
       ],
-      ans: 1,
+      ans: 3,
       exp: "Silhouette score is an internal validation metric — computed purely from the data and cluster assignments, no ground truth needed. External metrics (Rand Index, NMI) require ground truth. Internal metrics are used when truth is unavailable."
     },
     {
       q: "A customer loyalty dataset is clustered into 5 groups. Group 0 has 2 customers; groups 1–4 have ~250 each. Group 0 likely represents:",
       opts: [
+        "A clustering error",
         "The average customers",
         "Outliers or VIP customers with exceptional patterns",
-        "A clustering error",
         "The most common customer type"
       ],
-      ans: 1,
+      ans: 2,
       exp: "A very small cluster often represents genuine outliers (unusual behavior) or a rare but real segment (e.g., VIP/whale customers with extreme purchase values). Before dismissing it, investigate whether these customers have distinct, actionable characteristics."
     }
   ]
@@ -5315,6 +5315,3 @@ Level 1 (Meta-Model):
 `
   }
 ];
-// ─── COMPONENTS ─────────────────────────────────────────────────────────────
-
-// ─── COMPONENTS ─────────────────────────────────────────────────────────────
